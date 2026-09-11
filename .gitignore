@@ -1,0 +1,8 @@
+frontend/.next/
+frontend/.vite/
+frontend/.vinext/
+frontend/.wrangler/
+frontend/dist/
+frontend/node_modules/
+frontend/.env*
+frontend/next-env.d.ts
