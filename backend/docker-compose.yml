@@ -1,0 +1,13 @@
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: sita_shelters_dev
+    ports:
+      - "27017:27017"
+    volumes:
+      - sita_shelters_mongo_data:/data/db
+
+volumes:
+  sita_shelters_mongo_data:
