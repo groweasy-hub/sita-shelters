@@ -575,9 +575,9 @@ async function imageToDataUrl(src) {
 async function downloadInvoiceHtml(invoice) {
   const surface = document.querySelector(".billing-print-surface");
   if (!surface) return;
-  let logoSrc = `${window.location.origin}/images/logo.png`;
+  let logoSrc = `${window.location.origin}/images/image.png`;
   try {
-    logoSrc = await imageToDataUrl("/images/logo.png");
+    logoSrc = await imageToDataUrl("/images/image.png");
   } catch (error) {
     console.warn("Falling back to hosted invoice logo", error);
   }
@@ -691,7 +691,7 @@ function PrintInvoice({ invoice }) {
             <BrandImage
               alt="Sita Shelters - Creating Timeless Dreams"
               className="brand-image"
-              src="/images/logo.png"
+              src="/images/image.png"
             />
             <CompanyAddress className="company-address">
               <CompanyName className="company-name">Sita Shelters Pvt. Ltd.</CompanyName>
