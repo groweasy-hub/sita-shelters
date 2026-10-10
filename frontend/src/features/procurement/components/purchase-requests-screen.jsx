@@ -44,6 +44,9 @@ export function PurchaseRequestsScreen() {
     }),
     [requests],
   );
+  const showStatus = (nextStatus) => {
+    setStatus(nextStatus);
+  };
   return (
     <Root>
       <PageHeader
@@ -55,23 +58,27 @@ export function PurchaseRequestsScreen() {
         <KpiCard
           icon={ClipboardList}
           label="Total requests"
+          onClick={() => showStatus(null)}
           value={formatCompactNumber(kpis.total)}
         />
         <KpiCard
           icon={FileClock}
           label="Draft"
+          onClick={() => showStatus("draft")}
           tone="warning"
           value={kpis.draft}
         />
         <KpiCard
           icon={FileClock}
           label="Submitted"
+          onClick={() => showStatus("submitted")}
           tone="info"
           value={kpis.submitted}
         />
         <KpiCard
           icon={FileCheck2}
           label="Approved"
+          onClick={() => showStatus("approved")}
           tone="success"
           value={kpis.approved}
         />

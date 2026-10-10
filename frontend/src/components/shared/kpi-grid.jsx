@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react";
 import styled from "styled-components";
 
 const Grid = styled.section`
@@ -15,13 +16,53 @@ const Grid = styled.section`
   }
 `;
 const Card = styled.article`
+  position: relative;
   min-width: 0;
   padding: 1rem;
   @media (min-width: 640px) {
     padding: 1.25rem;
   }
   background: ${({ theme }) => theme.colors.card};
-  ${({ $onClick }) => ($onClick ? "cursor: pointer;" : "")}
+  color: inherit;
+  text-decoration: none;
+  ${({ $interactive }) => ($interactive ? "cursor: pointer;" : "")}
+  ${({ $interactive, theme }) =>
+    $interactive
+      ? `
+        transition:
+          background-color 150ms ease,
+          box-shadow 150ms ease,
+          transform 150ms ease;
+        &:hover {
+          background: ${theme.colors.muted};
+          box-shadow: inset 0 0 0 1px ${theme.colors.border};
+        }
+        &:active {
+          transform: translateY(1px);
+        }
+        &:focus-visible {
+          outline: 2px solid ${theme.colors.ring};
+          outline-offset: -2px;
+        }
+      `
+      : ""}
+`;
+const ActionCue = styled.span`
+  position: absolute;
+  right: 0.875rem;
+  bottom: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  color: ${({ theme }) => theme.colors.mutedForeground};
+  background: ${({ theme }) => theme.colors.surface};
+  svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
 `;
 const Top = styled.div`
   display: flex;
@@ -80,6 +121,7 @@ export function KpiGrid({ children, ...props }) {
 
 export function KpiCard({
   direction,
+  href,
   icon: Icon,
   label,
   note,
@@ -88,12 +130,28 @@ export function KpiCard({
   value,
   ...props
 }) {
+  const interactive = Boolean(href || onClick);
+  const handleKeyDown = (event) => {
+    if (!onClick || href) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onClick(event);
+    }
+  };
+  const cardProps = href
+    ? { as: Link, href }
+    : {
+        onClick,
+        onKeyDown: handleKeyDown,
+        role: onClick ? "button" : undefined,
+        tabIndex: onClick ? 0 : undefined,
+      };
   return (
     <Card
-      $onClick={Boolean(onClick)}
-      onClick={onClick}
-      role={onClick ? "button" : undefined}
-      tabIndex={onClick ? 0 : undefined}
+      $interactive={interactive}
+      aria-label={interactive ? `View ${label}` : undefined}
+      title={interactive ? `View ${label}` : undefined}
+      {...cardProps}
       {...props}
     >
       <Top>
@@ -114,6 +172,11 @@ export function KpiCard({
           ) : null}
           {note}
         </Note>
+      ) : null}
+      {interactive ? (
+        <ActionCue aria-hidden="true">
+          <ArrowRight strokeWidth={1.8} />
+        </ActionCue>
       ) : null}
     </Card>
   );

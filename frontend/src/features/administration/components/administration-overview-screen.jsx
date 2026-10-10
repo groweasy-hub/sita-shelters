@@ -131,17 +131,20 @@ export function AdministrationOverviewScreen() {
       <KpiGrid>
         <KpiCard
           icon={Users}
+          href="/access/users"
           label="Total users"
           value={administrationUsers.length}
         />
-        <KpiCard icon={KeyRound} label="Roles" value={APP_ROLES.length} />
+        <KpiCard icon={KeyRound} href="/access/roles" label="Roles" value={APP_ROLES.length} />
         <KpiCard
           icon={SlidersHorizontal}
+          href="/access/permissions"
           label="Permissions"
           value={PERMISSIONS.length}
         />
         <KpiCard
           icon={Building2}
+          href="/projects"
           label="Active projects"
           value={activeProjectCount}
         />

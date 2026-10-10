@@ -25,14 +25,14 @@ test("the Vercel API route preserves cookies and forwards only trusted request d
   const originalFetch = globalThis.fetch;
   let received;
 
-  process.env.BACKEND_API_URL = "https://sita-api.up.railway.app";
+  process.env.BACKEND_API_URL = "https://sita-api.onrender.com";
   globalThis.fetch = async (url, init) => {
     received = { url: url.toString(), init };
     return new Response(JSON.stringify({ ok: true }), {
       headers: {
         "content-type": "application/json",
         "set-cookie": "sita_shelters_session=session-value; Path=/; HttpOnly",
-        "x-upstream": "railway",
+        "x-upstream": "render",
       },
     });
   };
@@ -60,13 +60,13 @@ test("the Vercel API route preserves cookies and forwards only trusted request d
 
     assert.equal(
       received.url,
-      "https://sita-api.up.railway.app/api/auth/login?next=dashboard",
+      "https://sita-api.onrender.com/api/auth/login?next=dashboard",
     );
     assert.equal(received.init.headers.get("origin"), null);
     assert.equal(received.init.headers.get("x-vercel-forwarded-for"), null);
     assert.equal(received.init.headers.get("x-forwarded-for"), "203.0.113.10");
     assert.equal(response.status, 200);
-    assert.equal(response.headers.get("x-upstream"), "railway");
+    assert.equal(response.headers.get("x-upstream"), "render");
     assert.match(
       response.headers.get("set-cookie") ?? "",
       /sita_shelters_session=session-value/,

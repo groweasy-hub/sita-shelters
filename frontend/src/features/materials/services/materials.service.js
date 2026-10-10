@@ -4,6 +4,7 @@ import { HttpError } from "@/services/http-client";
 import {
   materialListParamsSchema,
   materialListResultSchema,
+  materialCreateInputSchema,
   materialSchema,
   materialsSchema,
   materialVendorsSchema,
@@ -135,6 +136,11 @@ export function createMaterialsService(adapter) {
     },
     async listVendors(materialId) {
       return materialVendorsSchema.parse(await adapter.listVendors(materialId));
+    },
+    async create(input) {
+      const normalized = materialCreateInputSchema.parse(input);
+      const material = await adapter.create(normalized);
+      return materialSchema.parse(material);
     },
     async update(materialId, input) {
       const normalized = materialUpdateInputSchema.parse(input);

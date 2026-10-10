@@ -82,6 +82,20 @@ export function PurchaseOrdersScreen() {
       ),
     };
   }, [allOrders]);
+  const showAllOrders = () => {
+    setStatus(null);
+    setVendorId(null);
+    setProjectId(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
+  const showStatus = (nextStatus) => {
+    setStatus(nextStatus);
+    setVendorId(null);
+    setProjectId(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
   return (
     <Root>
       <PageHeader
@@ -93,23 +107,27 @@ export function PurchaseOrdersScreen() {
         <KpiCard
           icon={ShoppingBag}
           label="Total purchase orders"
+          onClick={showAllOrders}
           value={formatCompactNumber(kpis.total)}
         />
         <KpiCard
           icon={PackageCheck}
           label="Active orders"
+          onClick={() => showStatus("released")}
           tone="info"
           value={kpis.active}
         />
         <KpiCard
           icon={TriangleAlert}
           label="Partially delivered"
+          onClick={() => showStatus("partially-delivered")}
           tone="warning"
           value={kpis.partiallyDelivered}
         />
         <KpiCard
           icon={IndianRupee}
           label="Active order value"
+          onClick={() => showStatus("released")}
           value={formatCurrency(kpis.activeValue, { maximumFractionDigits: 0 })}
         />
       </KpiGrid>

@@ -3,7 +3,7 @@
 Standalone Node/Express + MongoDB API for the SITA Shelters construction
 ERP. Deployed independently of the frontend (`../frontend`, a Next.js app on
 Vercel) — this service has no Next.js/React dependency and can run on any Node
-host. Railway is the production target.
+host. Render is the production target.
 
 In production, Vercel's same-origin `/api/*` route forwards browser requests
 to this service using its server-only `BACKEND_API_URL`. That keeps session
@@ -126,20 +126,20 @@ overhead this project doesn't need yet at its current size. If either
 `../frontend/src/config/permissions.js` or a `../frontend/src/lib/mock-data/*.js`
 file changes, update the matching copy here by hand.
 
-## Deploying to Railway
+## Deploying to Render
 
 1. **Create a MongoDB Atlas cluster** first (or any MongoDB reachable from
    the internet). Note its connection string.
-2. **Create a Railway service** from this repository, with:
+2. **Create a Render Web Service** from this repository, with:
    - **Root Directory**: `backend`
-   - **Config File Path**: `/backend/railway.json`
-   - Railway detects the Node app with Railpack; the committed configuration
-     starts `npm start`, waits for `GET /health`, and restarts failed runs.
-3. **Environment variables** on the Railway service:
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Health Check Path**: `/health`
+3. **Environment variables** on the Render service:
    - `MONGODB_URI` — the Atlas URI template with a database name in the
      path, using `${MONGODB_PASSWORD}` in its password position
    - `MONGODB_PASSWORD` — the newly rotated Atlas database-user password;
-     store it only in Railway's encrypted environment-variable settings
+     store it only in Render's encrypted environment-variable settings
    - `FRONTEND_ORIGIN=http://localhost:3000,https://<your-app>.vercel.app`
      — exact origins only; this is a safe fallback for intentional direct
      API calls. The normal Vercel proxy flow is same-origin and needs no
@@ -149,27 +149,27 @@ file changes, update the matching copy here by hand.
      used for reset links
    - `RESEND_API_KEY` and `EMAIL_FROM` — required for password-reset and
      lockout notification emails
-   - `TRUST_PROXY_HOPS=1` — Railway's reverse-proxy hop. Revisit this value
+   - `TRUST_PROXY_HOPS=1` — Render's reverse-proxy hop. Revisit this value
      if the network topology changes.
    - `GMAIL_SMTP_USER`, `GMAIL_SMTP_APP_PASSWORD`, and
      `GMAIL_SMTP_FROM_NAME` only if welcome-email delivery is enabled
    - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and
      `CLOUDINARY_API_SECRET` only if image uploads are enabled
-   - `PORT` is set by Railway automatically — don't override it
+   - `PORT` is set by Render automatically — don't override it
 4. **First deploy**: the app connects to MongoDB at startup
    (`src/index.js` calls `connectDB()` before `app.listen()`) — there's no
    separate migration step, Mongoose creates collections/indexes on first
    write. Seed data does not run automatically — after the first successful
    deploy, run `npm run db:seed` once against the production database
-   (Railway's shell, or locally with `MONGODB_URI` pointed at Atlas) to load
+   (Render's shell, or locally with `MONGODB_URI` pointed at Atlas) to load
    demo projects/materials/vendors. Set
    `BOOTSTRAP_SUPER_ADMIN_PASSWORD` before that seed if a bootstrap account
    is needed; the password is never printed or logged.
 5. **Deploy the frontend in Vercel**: set its server-only
-   `BACKEND_API_URL` to this Railway service's public HTTPS URL and leave
+   `BACKEND_API_URL` to this Render service's public HTTPS URL and leave
    `NEXT_PUBLIC_API_URL` unset. See `../frontend/README.md`.
 
-After Railway reports a healthy deployment, verify
-`https://<your-railway-service>.up.railway.app/health` returns `{ "ok": true
+After Render reports a healthy deployment, verify
+`https://<your-render-service>.onrender.com/health` returns `{ "ok": true
 }` before deploying Vercel. CORS only allows exact origins in
 `FRONTEND_ORIGIN`; do not use a wildcard with credentials.

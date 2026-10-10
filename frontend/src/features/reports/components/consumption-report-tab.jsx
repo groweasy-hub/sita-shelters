@@ -57,13 +57,14 @@ export function ConsumptionReportTab({ projectId }) {
   return (
     <ReportGrid $columns="1fr">
       <KpiGrid>
-        <KpiCard icon={Activity} label="Consumption entries" value={entries.length} />
+        <KpiCard icon={Activity} href="/consumption" label="Consumption entries" value={entries.length} />
         <KpiCard
+          href="/consumption"
           icon={Boxes}
           label="Total value consumed"
           value={formatCurrency(totalValue, { maximumFractionDigits: 0 })}
         />
-        <KpiCard label="Entries this month" value={thisMonthCount} />
+        <KpiCard href="/consumption" label="Entries this month" value={thisMonthCount} />
       </KpiGrid>
       <ReportGrid>
         <Panel>

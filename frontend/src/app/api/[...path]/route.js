@@ -63,7 +63,7 @@ function targetUrl(request, path) {
   }
 
   // Encode every dynamic segment. This keeps a request path from changing
-  // the configured Railway origin or escaping the intended /api namespace.
+  // the configured backend origin or escaping the intended /api namespace.
   const encodedPath = path
     .map((segment) => encodeURIComponent(segment))
     .join("/");
@@ -79,7 +79,7 @@ function outboundHeaders(request) {
   }
 
   // Vercel supplies this client IP and overwrites the normal X-Forwarded-For
-  // header. Railway has one trusted proxy hop configured, so its login rate
+  // header. The backend has one trusted proxy hop configured, so its login rate
   // limiter can use this address without accepting a browser-supplied value.
   const clientIp =
     request.headers.get("x-vercel-forwarded-for") ??
@@ -99,9 +99,9 @@ function inboundHeaders(upstream) {
     }
   }
 
-  // A cookie returned by Railway is intentionally relayed from this
+  // A cookie returned by the backend is intentionally relayed from this
   // same-origin route. Browsers therefore store it for the Vercel app rather
-  // than attempting to treat Railway as a third-party cookie origin.
+  // than attempting to treat the backend as a third-party cookie origin.
   const cookies = upstream.headers.getSetCookie?.() ?? [];
   if (cookies.length > 0) {
     for (const cookie of cookies) {

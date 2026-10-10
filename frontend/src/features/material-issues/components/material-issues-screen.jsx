@@ -103,6 +103,18 @@ export function MaterialIssuesScreen() {
       consumedCount,
     };
   }, [items, priceByCode]);
+  const showAllIssues = () => {
+    setStatus(null);
+    setDepartment(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
+  const showStatus = (nextStatus) => {
+    setStatus(nextStatus);
+    setDepartment(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
   return (
     <Root>
       <PageHeader
@@ -129,22 +141,26 @@ export function MaterialIssuesScreen() {
         <KpiCard
           icon={PackageMinus}
           label="Issues (page)"
+          onClick={showAllIssues}
           value={formatCompactNumber(kpis.count)}
         />
         <KpiCard
           icon={IndianRupee}
           label="Issued value (page)"
+          onClick={showAllIssues}
           value={formatCurrency(kpis.value, { maximumFractionDigits: 0 })}
         />
         <KpiCard
           icon={PackageOpen}
           label="Not yet consumed"
+          onClick={() => showStatus("issued")}
           tone="info"
           value={kpis.unconsumedCount}
         />
         <KpiCard
           icon={PackageX}
           label="Fully consumed"
+          onClick={() => showStatus("consumed")}
           tone="success"
           value={kpis.consumedCount}
         />

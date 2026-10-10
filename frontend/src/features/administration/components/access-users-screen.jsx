@@ -64,6 +64,24 @@ export function AccessUsersScreen() {
     }),
     [allUsers],
   );
+  const showAllUsers = () => {
+    setRole(null);
+    setStatus(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
+  const showStatus = (nextStatus) => {
+    setRole(null);
+    setStatus(nextStatus);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
+  const showAdmins = () => {
+    setRole(ADMIN_ROLE_VALUES[0]);
+    setStatus(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
   return (
     <Root>
       <PageHeader
@@ -74,10 +92,10 @@ export function AccessUsersScreen() {
       />
       <AccessNav />
       <KpiGrid>
-        <KpiCard icon={Users} label="Total users" value={kpis.total} />
-        <KpiCard icon={UserCheck} label="Active" value={kpis.active} />
-        <KpiCard icon={UserPlus} label="Invited" value={kpis.invited} />
-        <KpiCard icon={ShieldCheck} label="Admins" value={kpis.admins} />
+        <KpiCard icon={Users} label="Total users" onClick={showAllUsers} value={kpis.total} />
+        <KpiCard icon={UserCheck} label="Active" onClick={() => showStatus("active")} value={kpis.active} />
+        <KpiCard icon={UserPlus} label="Invited" onClick={() => showStatus("invited")} value={kpis.invited} />
+        <KpiCard icon={ShieldCheck} label="Admins" onClick={showAdmins} value={kpis.admins} />
       </KpiGrid>
       <DataTable
         ariaLabel="Users"

@@ -96,6 +96,18 @@ export function IndentsScreen() {
       completedThisMonth,
     };
   }, [allIndents]);
+  const showAllIndents = () => {
+    setStatus(null);
+    setPriority(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
+  const showStatus = (nextStatus) => {
+    setStatus(nextStatus);
+    setPriority(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
   return (
     <Root>
       <PageHeader
@@ -113,23 +125,27 @@ export function IndentsScreen() {
         <KpiCard
           icon={ClipboardList}
           label="Total indents"
+          onClick={showAllIndents}
           value={formatCompactNumber(kpis.total)}
         />
         <KpiCard
           icon={ClockAlert}
           label="Pending approval"
+          onClick={() => showStatus("submitted")}
           tone="warning"
           value={kpis.pendingApproval}
         />
         <KpiCard
           icon={PackageCheck}
           label="Approved, awaiting fulfilment"
+          onClick={() => showStatus("approved")}
           tone="info"
           value={kpis.awaitingFulfilment}
         />
         <KpiCard
           icon={PackageCheck}
           label="Completed this month"
+          onClick={() => showStatus("completed")}
           tone="success"
           value={kpis.completedThisMonth}
         />

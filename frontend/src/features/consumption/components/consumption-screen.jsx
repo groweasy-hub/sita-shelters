@@ -121,15 +121,30 @@ export function ConsumptionScreen() {
     [materials],
   );
   const total = data?.total ?? 0;
-  const kpis = useMemo(
-    () => ({
+  const kpis = useMemo(() => {
+    const topCategoryValue = topCategoryByCount(items);
+    const topCategoryOption = CONSUMPTION_CATEGORY_OPTIONS.find(
+      (option) => option.id === topCategoryValue || option.name === topCategoryValue,
+    );
+    return {
       count: items.length,
       value: consumedValue(items, priceByCode),
-      topCategory: topCategoryByCount(items),
+      topCategory: topCategoryOption?.name ?? topCategoryValue,
+      topCategoryId: topCategoryOption?.id ?? null,
       thisWeek: countThisWeek(items),
-    }),
-    [items, priceByCode],
-  );
+    };
+  }, [items, priceByCode]);
+  const showAllEntries = () => {
+    setCategoryId(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
+  const showTopCategory = () => {
+    if (!kpis.topCategoryId) return;
+    setCategoryId(kpis.topCategoryId);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
   return (
     <Root>
       <PageHeader
@@ -156,17 +171,25 @@ export function ConsumptionScreen() {
         <KpiCard
           icon={ListChecks}
           label="Entries (page)"
+          onClick={showAllEntries}
           value={formatCompactNumber(kpis.count)}
         />
         <KpiCard
           icon={IndianRupee}
           label="Value consumed (page)"
+          onClick={showAllEntries}
           value={formatCurrency(kpis.value, { maximumFractionDigits: 0 })}
         />
-        <KpiCard icon={Tags} label="Top category" value={kpis.topCategory} />
+        <KpiCard
+          icon={Tags}
+          label="Top category"
+          onClick={showTopCategory}
+          value={kpis.topCategory}
+        />
         <KpiCard
           icon={CalendarClock}
           label="Recorded this week"
+          onClick={() => setSorting([{ id: "consumedAt", desc: true }])}
           tone="info"
           value={kpis.thisWeek}
         />

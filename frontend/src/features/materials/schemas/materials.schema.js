@@ -48,6 +48,18 @@ export const materialUpdateInputSchema = z.object({
   lastPurchasePrice: z.coerce.number().finite().nonnegative(),
   status: materialStatusSchema,
 });
+export const materialCreateInputSchema = z.object({
+  code: identifierSchema,
+  name: z.string().trim().min(1, "Material name is required").max(255),
+  category: identifierSchema,
+  subcategory: identifierSchema,
+  unit: z.string().trim().min(1, "Unit is required").max(32),
+  specification: z.string().trim().max(500).optional(),
+  reorderLevel: z.coerce.number().finite().nonnegative(),
+  lastPurchasePrice: z.coerce.number().finite().nonnegative(),
+  status: materialStatusSchema.default("active"),
+  approvedVendorIds: z.array(identifierSchema).default([]),
+});
 export const materialListResultSchema = z.object({
   items: materialsSchema,
   total: z.number().int().nonnegative(),

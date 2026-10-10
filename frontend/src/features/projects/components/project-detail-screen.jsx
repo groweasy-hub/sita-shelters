@@ -238,6 +238,15 @@ export function ProjectDetailScreen({ projectId }) {
   const projectStock = inventoryItems.filter(
     (item) => item.projectId === project.id,
   );
+  const inventoryValue = projectStock.reduce(
+    (sum, item) => sum + (item.stockValue ?? 0),
+    0,
+  );
+  const lowStockAlerts = projectStock.filter(
+    (item) =>
+      item.status === "low-stock" ||
+      (item.reorderLevel > 0 && item.availableQuantity < item.reorderLevel),
+  ).length;
   const topMaterials = [...projectStock]
     .sort((first, second) => second.stockValue - first.stockValue)
     .slice(0, 6);
@@ -264,7 +273,7 @@ export function ProjectDetailScreen({ projectId }) {
         <KpiCard
           icon={IndianRupee}
           label="Inventory value"
-          value={formatCurrency(project.inventoryValue, {
+          value={formatCurrency(inventoryValue, {
             maximumFractionDigits: 0,
           })}
         />
@@ -282,7 +291,7 @@ export function ProjectDetailScreen({ projectId }) {
           icon={AlertTriangle}
           label="Low stock alerts"
           tone="warning"
-          value={project.lowStockAlerts}
+          value={lowStockAlerts}
         />
       </KpiGrid>
       <Tabs defaultValue="overview">

@@ -5,7 +5,7 @@ SITA Shelters Construction Resource & Inventory Management System.
 
 **The backend is a separate service.** It does not live in this repository
 tree — see `backend/` at the repo root, a standalone Node/Express + MongoDB
-(Mongoose) API deployed to Railway. This app deploys to Vercel and has one
+(Mongoose) API deployed to Render. This app deploys to Vercel and has one
 server-side `/api/[...path]` proxy route: every `api*Adapter` calls the
 shared client in `src/lib/api-client.js`, which uses that same-origin proxy
 in production. `BACKEND_API_URL` is server-only in Vercel; see §12 and §17
@@ -364,10 +364,10 @@ The flow is:
 
 ```text
 route → feature component → feature query hook → feature service
-      → src/lib/api-client.js → /api/[...path] (Vercel) → Railway backend
+      → src/lib/api-client.js → /api/[...path] (Vercel) → Render backend
 ```
 
-In Vercel, set the server-only `BACKEND_API_URL` to the Railway HTTPS URL and
+In Vercel, set the server-only `BACKEND_API_URL` to the Render HTTPS URL and
 leave `NEXT_PUBLIC_API_URL` unset. For local development,
 `NEXT_PUBLIC_API_URL=http://localhost:4000` intentionally bypasses the proxy.
 Secrets never use a `NEXT_PUBLIC_` prefix and do not belong in the browser
@@ -459,12 +459,12 @@ and its own private layers. Shared code never imports a business feature.
 16. Add a global abstraction only after genuine cross-feature reuse.
 17. **No backend code lives in this repository tree at all.** `backend/` is
     a separate top-level sibling of `frontend/` (this app) — its own
-    `package.json`, its own deploy target (Railway), no Next.js/React
+    `package.json`, its own deploy target (Render), no Next.js/React
     dependency, and no import path crosses the boundary in either
     direction except two intentionally-duplicated static config copies
     (see §18 below). This app talks to it exclusively over HTTP through
     `src/lib/api-client.js` (§12).
-18. Vercel forwards `/api/*` to Railway server-to-server, so the session
+18. Vercel forwards `/api/*` to Render server-to-server, so the session
     cookie stays same-origin. `src/features/auth/hooks/use-auth.js`
     (`useAuth()`, backed by TanStack Query) is the single source of "who's
     signed in" — every consumer calls it directly rather than threading a
@@ -494,7 +494,7 @@ Full detail lives in `backend/README.md` — this is the summary this app's
 contributors need to know:
 
 - Standalone Node/Express API over MongoDB with Mongoose models. It deploys
-  independently to Railway; Vercel communicates with it through the
+  independently to Render; Vercel communicates with it through the
   server-side API proxy.
 - Live domains include auth (bcrypt + hashed bearer-token sessions), master
   data, and the transactional workflows listed above. See the backend route

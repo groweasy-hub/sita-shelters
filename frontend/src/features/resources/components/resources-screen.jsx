@@ -73,6 +73,18 @@ export function ResourcesScreen() {
     }),
     [items, total],
   );
+  const showAllResources = () => {
+    setCategory("");
+    setStatus("");
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
+  const showStatus = (nextStatus) => {
+    setCategory("");
+    setStatus(nextStatus);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
   return (
     <Root>
       <PageHeader
@@ -86,22 +98,25 @@ export function ResourcesScreen() {
         title="Resources"
       />
       <KpiGrid>
-        <KpiCard icon={Boxes} label="Total resources" value={kpis.total} />
+        <KpiCard icon={Boxes} label="Total resources" onClick={showAllResources} value={kpis.total} />
         <KpiCard
           icon={HardHat}
           label="Assigned / in use (page)"
+          onClick={() => showStatus("assigned")}
           tone="accent"
           value={kpis.deployed}
         />
         <KpiCard
           icon={Wrench}
           label="Under maintenance (page)"
+          onClick={() => showStatus("under-maintenance")}
           tone="warning"
           value={kpis.underMaintenance}
         />
         <KpiCard
           icon={CircleCheckBig}
           label="Available (page)"
+          onClick={() => showStatus("available")}
           tone="success"
           value={kpis.available}
         />

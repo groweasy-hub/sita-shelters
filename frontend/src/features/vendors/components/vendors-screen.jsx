@@ -57,6 +57,11 @@ export function VendorsScreen() {
     const active = items.filter((item) => item.status === "active").length;
     return { avgRating, avgDelivery, active };
   }, [items]);
+  const showVendors = () => {
+    setCategory(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
   return (
     <Root>
       <PageHeader
@@ -68,17 +73,25 @@ export function VendorsScreen() {
         <KpiCard
           icon={Users}
           label="Vendors on page"
+          onClick={showVendors}
           value={formatCompactNumber(total)}
         />
-        <KpiCard icon={Building2} label="Active vendors" value={kpis.active} />
+        <KpiCard
+          icon={Building2}
+          label="Active vendors"
+          onClick={showVendors}
+          value={kpis.active}
+        />
         <KpiCard
           icon={Star}
           label="Average rating"
+          onClick={showVendors}
           value={kpis.avgRating === null ? "—" : kpis.avgRating.toFixed(1)}
         />
         <KpiCard
           icon={ShieldCheck}
           label="Average delivery performance"
+          onClick={showVendors}
           value={kpis.avgDelivery === null ? "—" : formatPercent(kpis.avgDelivery)}
         />
       </KpiGrid>

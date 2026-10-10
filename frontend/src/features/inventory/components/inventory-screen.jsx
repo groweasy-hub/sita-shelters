@@ -109,6 +109,15 @@ export function InventoryScreen({
       inTransitCount: scoped.filter((item) => item.status === "in-transit").length,
     };
   }, [allItems, damageRecords, scopeProjectId, scopeProjectIds]);
+  const showStatus = (nextStatus) => {
+    if (forcedStatus) {
+      router.push(nextStatus ? `/inventory/${nextStatus === "low-stock" ? "low-stock" : ""}` : "/inventory");
+      return;
+    }
+    setStatus(nextStatus ?? "");
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
   return (
     <Root>
       <PageHeader
@@ -128,16 +137,19 @@ export function InventoryScreen({
         <KpiCard
           icon={Warehouse}
           label="Stock value"
+          onClick={() => showStatus(null)}
           value={formatCurrency(kpis.stockValue, { maximumFractionDigits: 0 })}
         />
         <KpiCard
           icon={AlertTriangle}
           label="Below reorder level"
+          onClick={() => showStatus("low-stock")}
           tone="warning"
           value={kpis.lowStockCount}
         />
         <KpiCard
           icon={PackageX}
+          href="/inventory/damaged"
           label="Damaged value"
           tone="danger"
           value={formatCurrency(kpis.damagedValue, {
@@ -147,6 +159,7 @@ export function InventoryScreen({
         <KpiCard
           icon={ShieldAlert}
           label="In transit"
+          onClick={() => showStatus("in-transit")}
           tone="info"
           value={kpis.inTransitCount}
         />

@@ -17,7 +17,7 @@ const Root = styled.div`
   animation: ${enter} 220ms ease-out;
   @media (max-width: 1023px) {
     display: grid;
-    justify-items: start;
+    justify-items: center;
     width: 100%;
     max-width: 100%;
     overflow: hidden;
@@ -26,18 +26,11 @@ const Root = styled.div`
 const Header = styled.div`
   margin-bottom: 1.75rem;
   @media (max-width: 1023px) {
-    width: min(100%, 20rem);
-    justify-self: start;
-    margin-bottom: clamp(0.7rem, 1.8vh, 1.15rem);
-  }
-  @media (max-width: 520px) {
-    width: 68%;
-    min-width: 13.5rem;
-  }
-  @media (max-width: 430px) {
-    width: 66%;
-    min-width: 11rem;
-    margin-bottom: 0.65rem;
+    width: 100%;
+    max-width: 21.5rem;
+    justify-self: center;
+    margin-bottom: 1.25rem;
+    text-align: center;
   }
 `;
 const Eyebrow = styled.p`
@@ -49,13 +42,9 @@ const Eyebrow = styled.p`
   text-transform: uppercase;
   @media (max-width: 1023px) {
     color: #990011;
-    font-size: clamp(0.42rem, 1.45vw, 0.58rem);
+    font-size: 0.68rem;
     font-weight: 900;
-    letter-spacing: 0.16em;
-  }
-  @media (max-width: 430px) {
-    font-size: 0.46rem;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
   }
 `;
 const Title = styled.h2`
@@ -65,80 +54,49 @@ const Title = styled.h2`
   letter-spacing: -0.045em;
   line-height: 1.08;
   @media (max-width: 1023px) {
-    margin-top: clamp(0.35rem, 1vh, 0.55rem);
+    margin-top: 0.5rem;
     color: #080d13;
-    font-size: clamp(1.35rem, 5.8vw, 2.1rem);
+    font-size: 2.35rem;
     font-weight: 850;
     letter-spacing: 0;
-    line-height: 0.98;
-  }
-  @media (max-width: 520px) {
-    font-size: clamp(2rem, 11vw, 2.65rem);
-  }
-  @media (max-width: 360px) {
-    font-size: clamp(1.65rem, 10vw, 2rem);
-    line-height: 1;
-  }
-  @media (max-width: 430px) {
-    font-size: clamp(1.42rem, 7.4vw, 1.72rem);
-    line-height: 1;
+    line-height: 1.02;
     white-space: normal;
+  }
+  @media (max-width: 380px) {
+    font-size: 2rem;
   }
 `;
 const Description = styled.p`
   margin: 0.5rem 0 0;
   color: ${({ theme }) => theme.colors.mutedForeground};
   @media (max-width: 1023px) {
-    margin-top: clamp(0.25rem, 0.9vh, 0.45rem);
+    margin-top: 0.55rem;
     color: #777f87;
-    font-size: clamp(0.62rem, 2.2vw, 0.82rem);
-    line-height: 1.25;
-  }
-  @media (max-width: 360px) {
-    font-size: 0.82rem;
-    white-space: normal;
-  }
-  @media (max-width: 430px) {
-    font-size: 0.68rem;
-    line-height: 1.2;
+    font-size: 0.95rem;
+    line-height: 1.35;
   }
 `;
 const Form = styled.form`
   display: grid;
   gap: 1.25rem;
   @media (max-width: 1023px) {
-    width: min(100%, 20rem);
-
-    justify-self: start;
-    gap: clamp(0.55rem, 1.5vh, 0.85rem);
-  }
-  @media (max-width: 520px) {
-    width: 68%;
-    min-width: 13.5rem;
-  }
-  @media (max-width: 430px) {
-    width: 66%;
-    min-width: 11rem;
-    gap: 0.48rem;
+    width: 100%;
+    max-width: 21.5rem;
+    justify-self: center;
+    gap: 0.85rem;
   }
 `;
 const Field = styled.div`
   display: grid;
   gap: 0.5rem;
   @media (max-width: 1023px) {
-    gap: clamp(0.25rem, 0.8vh, 0.4rem);
+    gap: 0.45rem;
   }
   label {
     @media (max-width: 1023px) {
       color: #111820;
-      font-size: clamp(0.44rem, 1.55vw, 0.58rem);
+      font-size: 0.75rem;
       font-weight: 800;
-    }
-    @media (max-width: 360px) {
-      font-size: 0.46rem;
-    }
-    @media (max-width: 430px) {
-      font-size: 0.46rem;
     }
   }
 `;
@@ -159,54 +117,28 @@ const ControlIcon = styled.span`
     height: 1.35rem;
   }
   @media (max-width: 1023px) {
-    left: clamp(0.75rem, 2.6vw, 1rem);
+    left: 1rem;
     svg {
-      width: clamp(0.85rem, 2.7vw, 1.1rem);
-      height: clamp(0.85rem, 2.7vw, 1.1rem);
-    }
-  }
-  @media (max-width: 430px) {
-    left: 0.85rem;
-    svg {
-      width: 1rem;
-      height: 1rem;
+      width: 1.15rem;
+      height: 1.15rem;
     }
   }
 `;
 const LoginInput = styled(Input)`
   padding-left: 3rem;
   @media (max-width: 1023px) {
-    height: clamp(2.1rem, 5.6vh, 2.7rem);
-    padding-right: clamp(2.35rem, 7vw, 3rem);
-    padding-left: clamp(2.55rem, 7.8vw, 3.25rem);
+    height: 3.15rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
     border-color: #d5d5d7;
-    border-radius: 1rem;
+    border-radius: 1.25rem;
     background: #fffdfc;
     color: #111820;
-    font-size: clamp(0.62rem, 2.3vw, 0.82rem);
+    font-size: 1rem;
     box-shadow: 0 1px 0 rgb(0 0 0 / 0.03);
     &::placeholder {
       color: #7f8790;
     }
-  }
-  @media (max-width: 520px) {
-    height: clamp(2.6rem, 7.2vh, 3.1rem);
-    padding-left: 3rem;
-    font-size: 0.9rem;
-  }
-  @media (max-width: 360px) {
-    height: clamp(2.35rem, 6.8vh, 2.8rem);
-    padding-right: 2.75rem;
-    padding-left: 2.7rem;
-    border-radius: 0.8rem;
-    font-size: 0.78rem;
-  }
-  @media (max-width: 430px) {
-    height: 2.55rem;
-    padding-right: 2.4rem;
-    padding-left: 2.45rem;
-    border-radius: 0.78rem;
-    font-size: 0.68rem;
   }
 `;
 const PasswordToggle = styled.button`
@@ -226,58 +158,36 @@ const PasswordToggle = styled.button`
     height: 1.25rem;
   }
   @media (max-width: 1023px) {
-    right: clamp(0.45rem, 1.8vw, 0.7rem);
-    width: clamp(1.55rem, 4.6vw, 1.9rem);
-    height: clamp(1.55rem, 4.6vw, 1.9rem);
+    right: 0.7rem;
+    width: 2.2rem;
+    height: 2.2rem;
     svg {
-      width: clamp(0.85rem, 2.8vw, 1.1rem);
-      height: clamp(0.85rem, 2.8vw, 1.1rem);
-    }
-  }
-  @media (max-width: 430px) {
-    right: 0.45rem;
-    width: 1.9rem;
-    height: 1.9rem;
-    svg {
-      width: 1rem;
-      height: 1rem;
+      width: 1.15rem;
+      height: 1.15rem;
     }
   }
 `;
 const SubmitButton = styled(Button)`
   width: 100%;
   height: 2.5rem;
-  justify-content: space-between;
+  justify-content: center;
   @media (max-width: 1023px) {
-    height: clamp(2.2rem, 5.8vh, 2.85rem);
-    margin-top: clamp(0.05rem, 0.5vh, 0.2rem);
-    padding-inline: clamp(0.75rem, 3vw, 1.05rem);
-    border-radius: 1rem;
+    height: 3.15rem;
+    margin-top: 0.25rem;
+    padding-inline: 1rem;
+    border-radius: 1.25rem;
     background: linear-gradient(135deg, #b70016 0%, #990011 62%, #c50019 100%);
     color: #ffffff;
-    font-size: clamp(0.66rem, 2.2vw, 0.86rem);
+    font-size: 0.95rem;
     font-weight: 800;
     box-shadow: 0 1.25rem 2.5rem rgb(153 0 17 / 0.18);
     svg {
-      width: clamp(0.85rem, 2.8vw, 1.1rem);
-      height: clamp(0.85rem, 2.8vw, 1.1rem);
+      width: 1rem;
+      height: 1rem;
     }
-  }
-  @media (max-width: 520px) {
-    height: clamp(2.9rem, 7.4vh, 3.35rem);
-    padding-inline: 1rem;
-    font-size: 0.78rem;
-  }
-  @media (max-width: 360px) {
-    height: clamp(2.65rem, 7vh, 3rem);
-    border-radius: 0.8rem;
-    font-size: 0.72rem;
-  }
-  @media (max-width: 430px) {
-    height: 2.8rem;
-    padding-inline: 0.8rem;
-    border-radius: 0.78rem;
-    font-size: 0.72rem;
+    > svg {
+      display: none;
+    }
   }
 `;
 const ButtonLabel = styled.span`
@@ -285,7 +195,7 @@ const ButtonLabel = styled.span`
   align-items: center;
   gap: 0.5rem;
   @media (max-width: 1023px) {
-    gap: clamp(0.55rem, 2.4vw, 0.9rem);
+    gap: 0.55rem;
   }
 `;
 const ErrorMessage = styled.p`
@@ -317,56 +227,23 @@ const Notice = styled.div`
     color: ${({ theme }) => theme.colors.info};
   }
   @media (max-width: 1023px) {
-    width: min(100%, 20rem);
-    justify-self: start;
-    gap: clamp(0.65rem, 2.8vw, 1rem);
-    margin-top: clamp(0.45rem, 1.2vh, 0.7rem);
-    padding: clamp(0.45rem, 1.35vh, 0.7rem) clamp(0.65rem, 2.2vw, 0.9rem);
+    width: 100%;
+    max-width: 21.5rem;
+    justify-self: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding: 0.875rem 1rem;
     border-color: #dfe5eb;
-    border-radius: 1rem;
+    border-radius: 1.25rem;
     background: #f9fafc;
     color: #101820;
-    font-size: clamp(0.4rem, 1.42vw, 0.52rem);
+    font-size: 0.78rem;
     box-shadow: 0 0.75rem 2rem rgb(17 24 39 / 0.04);
     svg {
-      width: clamp(0.85rem, 2.7vw, 1.05rem);
-      height: clamp(0.85rem, 2.7vw, 1.05rem);
+      width: 1rem;
+      height: 1rem;
       margin-top: 0.1rem;
       color: #406a8f;
-    }
-  }
-  @media (max-width: 520px) {
-    padding: 0.7rem 0.85rem;
-    font-size: 0.48rem;
-  }
-  @media (max-width: 520px) {
-    width: 68%;
-    min-width: 13.5rem;
-  }
-  @media (max-width: 360px) {
-    width: 66%;
-    min-width: 11rem;
-    gap: 0.5rem;
-    margin-top: 0.55rem;
-    padding: 0.55rem 0.65rem;
-    border-radius: 0.8rem;
-    font-size: 0.44rem;
-    svg {
-      width: 1rem;
-      height: 1rem;
-    }
-  }
-  @media (max-width: 430px) {
-    width: 66%;
-    min-width: 11rem;
-    gap: 0.5rem;
-    margin-top: 0.55rem;
-    padding: 0.55rem 0.65rem;
-    border-radius: 0.78rem;
-    font-size: 0.44rem;
-    svg {
-      width: 1rem;
-      height: 1rem;
     }
   }
 `;

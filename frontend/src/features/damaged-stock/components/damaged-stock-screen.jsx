@@ -76,11 +76,20 @@ export function DamagedStockScreen() {
     return {
       damageValue,
       wastageValue,
+      topReason: topReason?.[0] ?? null,
       topReasonLabel:
         DAMAGE_REASON_OPTIONS.find((option) => option.value === topReason?.[0])
           ?.label ?? "—",
     };
   }, [records]);
+  const showType = (nextType) => {
+    setType(nextType);
+    setReason("all");
+  };
+  const showAllIncidents = () => {
+    setType("all");
+    setReason("all");
+  };
   return (
     <Root>
       <PageHeader
@@ -98,12 +107,14 @@ export function DamagedStockScreen() {
         <KpiCard
           icon={PackageX}
           label="Damaged material value"
+          onClick={() => showType("damage")}
           tone="danger"
           value={formatCurrency(kpis.damageValue, { maximumFractionDigits: 0 })}
         />
         <KpiCard
           icon={Recycle}
           label="Construction wastage value"
+          onClick={() => showType("wastage")}
           tone="warning"
           value={formatCurrency(kpis.wastageValue, {
             maximumFractionDigits: 0,
@@ -112,11 +123,18 @@ export function DamagedStockScreen() {
         <KpiCard
           icon={TrendingDown}
           label="Total incidents"
+          onClick={showAllIncidents}
           value={records.length}
         />
         <KpiCard
           icon={TriangleAlert}
           label="Leading reason by value"
+          onClick={() => {
+            if (kpis.topReason) {
+              setType("all");
+              setReason(kpis.topReason);
+            }
+          }}
           value={kpis.topReasonLabel}
         />
       </KpiGrid>

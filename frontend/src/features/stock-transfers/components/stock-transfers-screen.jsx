@@ -84,6 +84,20 @@ export function StockTransfersScreen() {
     const received = items.filter((item) => item.status === "received").length;
     return { inTransit, pendingApproval, received };
   }, [items]);
+  const showAllTransfers = () => {
+    setStatus("");
+    setSourceProjectId(null);
+    setDestinationProjectId(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
+  const showStatus = (nextStatus) => {
+    setStatus(nextStatus);
+    setSourceProjectId(null);
+    setDestinationProjectId(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
   return (
     <Root>
       <PageHeader
@@ -96,23 +110,27 @@ export function StockTransfersScreen() {
         <KpiCard
           icon={ArrowLeftRight}
           label="Transfers on page"
+          onClick={showAllTransfers}
           value={formatCompactNumber(total)}
         />
         <KpiCard
           icon={Route}
           label="In transit"
+          onClick={() => showStatus("in-transit")}
           tone="info"
           value={kpis.inTransit}
         />
         <KpiCard
           icon={Hourglass}
           label="Pending approval"
+          onClick={() => showStatus("requested")}
           tone="warning"
           value={kpis.pendingApproval}
         />
         <KpiCard
           icon={CircleCheck}
           label="Received (page)"
+          onClick={() => showStatus("received")}
           tone="success"
           value={kpis.received}
         />

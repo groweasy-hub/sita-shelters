@@ -44,6 +44,18 @@ export function useAllMaterials() {
     staleTime: Infinity,
   });
 }
+export function useCreateMaterial() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input) => materialsService.create(input),
+    onSuccess: (material) => {
+      queryClient.invalidateQueries({ queryKey: materialsQueryKeys.all });
+      queryClient.invalidateQueries({ queryKey: materialsQueryKeys.lists() });
+      queryClient.setQueryData(materialsQueryKeys.detail(material.id), material);
+      queryClient.setQueryData(materialsQueryKeys.detail(material.code), material);
+    },
+  });
+}
 export function useUpdateMaterial() {
   const queryClient = useQueryClient();
   return useMutation({

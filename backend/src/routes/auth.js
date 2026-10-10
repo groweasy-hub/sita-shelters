@@ -83,7 +83,7 @@ function sessionCookie(value, maxAgeSeconds) {
     path: "/",
     httpOnly: true,
     // The browser talks to the Vercel same-origin /api proxy, which forwards
-    // to Railway server-to-server. Lax protects the session from cross-site
+    // to the backend server-to-server. Lax protects the session from cross-site
     // form requests while still allowing normal top-level navigation.
     sameSite: "lax",
     secure: IS_PRODUCTION,

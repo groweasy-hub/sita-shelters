@@ -80,6 +80,16 @@ export function QualityControlScreen() {
     }),
     [allInspections],
   );
+  const showAllInspections = () => {
+    setStatus(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
+  const showStatus = (nextStatus) => {
+    setStatus(nextStatus);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
   return (
     <Root>
       <PageHeader
@@ -91,23 +101,27 @@ export function QualityControlScreen() {
         <KpiCard
           icon={ClipboardCheck}
           label="Total inspections"
+          onClick={showAllInspections}
           value={formatCompactNumber(kpis.total)}
         />
         <KpiCard
           icon={ScanSearch}
           label="Awaiting / in progress"
+          onClick={() => showStatus("pending-inspection")}
           tone="warning"
           value={kpis.pending}
         />
         <KpiCard
           icon={ShieldCheck}
           label="Accepted"
+          onClick={() => showStatus("accepted")}
           tone="success"
           value={kpis.accepted}
         />
         <KpiCard
           icon={PackageX}
           label="Rejected"
+          onClick={() => showStatus("rejected")}
           tone="danger"
           value={kpis.rejected}
         />

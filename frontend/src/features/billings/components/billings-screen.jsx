@@ -699,6 +699,13 @@ export function BillingsScreen() {
     setChargeDraft(chargeDraftFromInvoice(selectedInvoice));
   }, [selectedInvoice?.id]);
 
+  function showInvoices() {
+    setSearch("");
+    setFromDate("");
+    setToDate("");
+    if (selectedInvoice) setSelectedId(selectedInvoice.id);
+  }
+
   function updateChargeField(field, value) {
     setChargeDraft((current) => ({ ...current, [field]: value }));
   }
@@ -734,10 +741,10 @@ export function BillingsScreen() {
         title="Billings"
       />
       <KpiGrid>
-        <KpiCard icon={ReceiptText} label="Invoices" value={formatCompactNumber(kpis.count)} />
-        <KpiCard icon={IndianRupee} label="Taxable value" value={formatCurrency(kpis.taxable, { maximumFractionDigits: 0 })} />
-        <KpiCard icon={FileText} label="GST amount" value={formatCurrency(kpis.tax, { maximumFractionDigits: 0 })} />
-        <KpiCard icon={IndianRupee} label="Invoice total" value={formatCurrency(kpis.total, { maximumFractionDigits: 0 })} />
+        <KpiCard icon={ReceiptText} label="Invoices" onClick={showInvoices} value={formatCompactNumber(kpis.count)} />
+        <KpiCard icon={IndianRupee} label="Taxable value" onClick={showInvoices} value={formatCurrency(kpis.taxable, { maximumFractionDigits: 0 })} />
+        <KpiCard icon={FileText} label="GST amount" onClick={showInvoices} value={formatCurrency(kpis.tax, { maximumFractionDigits: 0 })} />
+        <KpiCard icon={IndianRupee} label="Invoice total" onClick={showInvoices} value={formatCurrency(kpis.total, { maximumFractionDigits: 0 })} />
       </KpiGrid>
       <Panel className="no-print">
         <PanelHeader>

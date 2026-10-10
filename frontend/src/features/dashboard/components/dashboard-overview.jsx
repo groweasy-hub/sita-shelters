@@ -683,9 +683,31 @@ export function DashboardOverview() {
   );
 
   const isPortfolioWide = scopeProjectIds === null;
+  const stockValueByProject = useMemo(() => {
+    const values = new Map();
+    inventoryItems.forEach((item) => {
+      values.set(
+        item.projectId,
+        (values.get(item.projectId) ?? 0) + (item.stockValue ?? 0),
+      );
+    });
+    return values;
+  }, [inventoryItems]);
+  const lowStockCountByProject = useMemo(() => {
+    const counts = new Map();
+    inventoryItems.forEach((item) => {
+      const isLowStock =
+        item.status === "low-stock" ||
+        (item.reorderLevel > 0 && item.availableQuantity < item.reorderLevel);
+      if (isLowStock) {
+        counts.set(item.projectId, (counts.get(item.projectId) ?? 0) + 1);
+      }
+    });
+    return counts;
+  }, [inventoryItems]);
   const portfolioStockValue = useMemo(
-    () => projects.reduce((sum, project) => sum + project.inventoryValue, 0),
-    [projects],
+    () => projects.reduce((sum, project) => sum + (stockValueByProject.get(project.id) ?? 0), 0),
+    [projects, stockValueByProject],
   );
   const activeProjectCount = projects.filter(
     (p) => p.status === "active",
@@ -794,9 +816,13 @@ export function DashboardOverview() {
 
   const attentionProjects = useMemo(() => {
     return [...projects]
-      .sort((first, second) => second.lowStockAlerts - first.lowStockAlerts)
+      .sort(
+        (first, second) =>
+          (lowStockCountByProject.get(second.id) ?? 0) -
+          (lowStockCountByProject.get(first.id) ?? 0),
+      )
       .slice(0, 3);
-  }, [projects]);
+  }, [lowStockCountByProject, projects]);
 
   const workflowQueue = useMemo(() => {
     const role = user?.role;
@@ -1108,19 +1134,19 @@ export function DashboardOverview() {
                 <div>
                   <MicroLabel>Stock value</MicroLabel>
                   <Stock>
-                    {formatCurrency(project.inventoryValue, {
+                    {formatCurrency(stockValueByProject.get(project.id) ?? 0, {
                       maximumFractionDigits: 0,
                     })}
                   </Stock>
                 </div>
-                <Flags $hasFlags={project.lowStockAlerts > 0}>
-                  {project.lowStockAlerts > 0 ? (
+                <Flags $hasFlags={(lowStockCountByProject.get(project.id) ?? 0) > 0}>
+                  {(lowStockCountByProject.get(project.id) ?? 0) > 0 ? (
                     <CircleAlert aria-hidden="true" size={14} />
                   ) : (
                     <CheckCircle2 aria-hidden="true" size={14} />
                   )}
-                  {project.lowStockAlerts} flag
-                  {project.lowStockAlerts === 1 ? "" : "s"}
+                  {lowStockCountByProject.get(project.id) ?? 0} flag
+                  {(lowStockCountByProject.get(project.id) ?? 0) === 1 ? "" : "s"}
                 </Flags>
               </Project>
             ))}

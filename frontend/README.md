@@ -17,7 +17,7 @@ TypeScript toolchain or TypeScript source.
 
 The Cloudflare-compatible vinext/Sites build remains available for the
 existing local workflow. Production deployment is configured for Vercel's
-Next.js runtime and a Railway API.
+Next.js runtime and a Render API.
 
 ## Run locally
 
@@ -52,18 +52,18 @@ uses `npx next build`.
 Set these environment variables for Production (and Preview if you want
 preview deployments to use the API):
 
-- `BACKEND_API_URL=https://<your-railway-service>.up.railway.app`
+- `BACKEND_API_URL=https://<your-render-service>.onrender.com`
 - `NEXT_PUBLIC_ENABLE_TELEMETRY=false` (optional)
 
 Do **not** set `NEXT_PUBLIC_API_URL` in Vercel. When absent, every browser
 request goes to this app's `/api/*` route, which forwards it server-to-server
-to Railway. This avoids third-party-cookie failures and avoids needing to add
-each temporary Vercel preview domain to backend CORS. The Railway URL remains
+to Render. This avoids third-party-cookie failures and avoids needing to add
+each temporary Vercel preview domain to backend CORS. The Render URL remains
 server-only and is not bundled into browser JavaScript.
 
 For local development, keep `NEXT_PUBLIC_API_URL=http://localhost:4000` in
 `.env.local` to call the local API directly. See `../backend/README.md` for
-the Railway environment variables and release order.
+the Render environment variables and release order.
 
 ## Architecture
 

@@ -84,12 +84,14 @@ export function ProcurementReportTab({ projectId }) {
     <ReportGrid $columns="1fr">
       <KpiGrid>
         <KpiCard
+          href="/procurement/purchase-orders"
           icon={IndianRupee}
           label="Total order value"
           value={formatCurrency(totalValue, { maximumFractionDigits: 0 })}
         />
-        <KpiCard label="Purchase orders" value={orders.length} />
+        <KpiCard href="/procurement/purchase-orders" label="Purchase orders" value={orders.length} />
         <KpiCard
+          href="/procurement/purchase-orders"
           icon={FileClock}
           label="Pending deliveries"
           tone="warning"

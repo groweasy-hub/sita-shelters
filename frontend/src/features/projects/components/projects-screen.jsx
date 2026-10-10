@@ -35,6 +35,7 @@ import {
   formatDate,
 } from "@/lib/formatters";
 import { getUserName } from "@/lib/mock-data/users";
+import { useAllInventoryItems } from "@/features/inventory";
 import { PROJECT_STATUS_OPTIONS } from "../constants/projects.constants";
 import { useProjects } from "../hooks/use-projects";
 import { AddProjectDialog } from "./add-project-dialog";
@@ -203,9 +204,32 @@ const StatValue = styled.p`
 
 export function ProjectsScreen() {
   const { data: projects = [] } = useProjects();
+  const { data: inventoryItems = [] } = useAllInventoryItems();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [createdProject, setCreatedProject] = useState(null);
+  const stockValueByProject = useMemo(() => {
+    const values = new Map();
+    inventoryItems.forEach((item) => {
+      values.set(
+        item.projectId,
+        (values.get(item.projectId) ?? 0) + (item.stockValue ?? 0),
+      );
+    });
+    return values;
+  }, [inventoryItems]);
+  const lowStockCountByProject = useMemo(() => {
+    const counts = new Map();
+    inventoryItems.forEach((item) => {
+      const isLowStock =
+        item.status === "low-stock" ||
+        (item.reorderLevel > 0 && item.availableQuantity < item.reorderLevel);
+      if (isLowStock) {
+        counts.set(item.projectId, (counts.get(item.projectId) ?? 0) + 1);
+      }
+    });
+    return counts;
+  }, [inventoryItems]);
   const filtered = useMemo(() => {
     return projects.filter((project) => {
       const matchesStatus = status === "all" || project.status === status;
@@ -227,15 +251,25 @@ export function ProjectsScreen() {
     });
   }, [projects, search, status]);
   const kpis = useMemo(() => {
-    const totalValue = projects.reduce((sum, p) => sum + p.inventoryValue, 0);
+    const totalValue = projects.reduce(
+      (sum, project) => sum + (stockValueByProject.get(project.id) ?? 0),
+      0,
+    );
     const active = projects.filter((p) => p.status === "active").length;
     const pendingIndents = projects.reduce(
       (sum, p) => sum + p.activeIndents,
       0,
     );
-    const lowStock = projects.reduce((sum, p) => sum + p.lowStockAlerts, 0);
+    const lowStock = projects.reduce(
+      (sum, project) => sum + (lowStockCountByProject.get(project.id) ?? 0),
+      0,
+    );
     return { totalValue, active, pendingIndents, lowStock };
-  }, [projects]);
+  }, [lowStockCountByProject, projects, stockValueByProject]);
+  const showStatus = (nextStatus) => {
+    setSearch("");
+    setStatus(nextStatus);
+  };
   return (
     <Root>
       <PageHeader
@@ -264,20 +298,23 @@ export function ProjectsScreen() {
         </CreatedNotice>
       ) : null}
       <KpiGrid>
-        <KpiCard icon={Building2} label="Active projects" value={kpis.active} />
+        <KpiCard icon={Building2} label="Active projects" onClick={() => showStatus("active")} value={kpis.active} />
         <KpiCard
           icon={ShoppingCart}
           label="Total inventory value"
+          href="/inventory"
           value={formatCurrency(kpis.totalValue, { maximumFractionDigits: 0 })}
         />
         <KpiCard
           icon={ClipboardList}
           label="Active indents"
+          href="/indents"
           value={formatCompactNumber(kpis.pendingIndents)}
         />
         <KpiCard
           icon={AlertTriangle}
           label="Low stock alerts"
+          href="/inventory/low-stock"
           tone="warning"
           value={formatCompactNumber(kpis.lowStock)}
         />
@@ -353,7 +390,7 @@ export function ProjectsScreen() {
                 <Stat>
                   <StatLabel>Inventory value</StatLabel>
                   <StatValue>
-                    {formatCurrency(project.inventoryValue, {
+                    {formatCurrency(stockValueByProject.get(project.id) ?? 0, {
                       maximumFractionDigits: 0,
                     })}
                   </StatValue>
@@ -369,10 +406,10 @@ export function ProjectsScreen() {
                 <Stat>
                   <StatLabel>Low stock</StatLabel>
                   <StatValue>
-                    {project.lowStockAlerts > 0 ? (
+                    {(lowStockCountByProject.get(project.id) ?? 0) > 0 ? (
                       <CircleAlert aria-hidden="true" />
                     ) : null}
-                    {project.lowStockAlerts}
+                    {lowStockCountByProject.get(project.id) ?? 0}
                   </StatValue>
                 </Stat>
               </StatRow>

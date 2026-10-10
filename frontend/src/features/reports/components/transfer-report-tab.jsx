@@ -56,13 +56,14 @@ export function TransferReportTab({ projectId }) {
   return (
     <ReportGrid $columns="1fr">
       <KpiGrid>
-        <KpiCard icon={ArrowLeftRight} label="Total transfers" value={transfers.length} />
+        <KpiCard icon={ArrowLeftRight} href="/stock-transfers" label="Total transfers" value={transfers.length} />
         <KpiCard
+          href="/stock-transfers"
           icon={Clock}
           label="Average request-to-receipt time"
           value={received.length ? `${averageDuration.toFixed(1)} days` : "—"}
         />
-        <KpiCard label="Completed transfers" value={received.length} />
+        <KpiCard href="/stock-transfers" label="Completed transfers" value={received.length} />
       </KpiGrid>
       <ReportGrid>
         <Panel>

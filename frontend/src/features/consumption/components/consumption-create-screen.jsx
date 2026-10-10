@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ClipboardList } from "lucide-react";
 import styled from "styled-components";
 
 import { AccessDeniedState, PageHeader } from "@/components/shared";
@@ -189,8 +189,16 @@ export function ConsumptionCreateScreen() {
       />
       {eligibleIssues.length === 0 ? (
         <EmptyState
-          description="No material issue currently has an outstanding quantity available to consume."
-          title="Nothing to log"
+          action={
+            <Button asChild>
+              <Link href="/indents/create">
+                <ClipboardList aria-hidden="true" strokeWidth={1.75} />
+                Raise Indent
+              </Link>
+            </Button>
+          }
+          description="No material issue currently has an outstanding quantity available to consume. Raise an indent to request stock for the site."
+          title="Stock not available"
         />
       ) : (
         <Form noValidate onSubmit={onSubmit}>

@@ -15,6 +15,7 @@ export {
 export {
   materialsListQueryOptions,
   useAllMaterials,
+  useCreateMaterial,
   useMaterial,
   useMaterialVendors,
   useMaterials,
@@ -23,6 +24,7 @@ export {
 export {
   materialListParamsSchema,
   materialListResultSchema,
+  materialCreateInputSchema,
   materialSchema,
   materialsSchema,
   materialStatusSchema,

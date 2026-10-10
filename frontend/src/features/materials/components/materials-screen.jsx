@@ -14,8 +14,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { hasPermission } from "@/config/permissions";
+import { useCurrentUser } from "@/features/profile";
 import { formatCompactNumber, formatCurrency } from "@/lib/formatters";
 import { MATERIAL_CATEGORY_OPTIONS } from "@/lib/mock-data/material-categories";
+import { AddMaterialDialog } from "./add-material-dialog";
 import { materialsColumns } from "./materials-columns";
 import { MaterialIntelligencePanel } from "./material-intelligence-panel";
 import { useMaterials } from "../hooks/use-materials";
@@ -26,10 +29,19 @@ const Root = styled.div`
   margin: 0 auto;
   gap: 1.5rem;
 `;
+const HeaderActions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+`;
 
 export function MaterialsScreen() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const currentUser = useCurrentUser();
+  const canManageMaterials = Boolean(
+    currentUser && hasPermission(currentUser.role, "materials:manage"),
+  );
   const [category, setCategory] = useState(searchParams.get("category"));
   const [search, setSearch] = useState("");
   const [sorting, setSorting] = useState([{ id: "name", desc: false }]);
@@ -55,17 +67,25 @@ export function MaterialsScreen() {
       categoryCount: MATERIAL_CATEGORY_OPTIONS.length,
     };
   }, [items]);
+  const showAllMaterials = () => {
+    setCategory(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
   return (
     <Root>
       <PageHeader
         actions={
-          <Button
-            onClick={() => router.push("/materials/categories")}
-            variant="outline"
-          >
-            <Layers aria-hidden="true" />
-            View categories
-          </Button>
+          <HeaderActions>
+            {canManageMaterials ? <AddMaterialDialog /> : null}
+            <Button
+              onClick={() => router.push("/materials/categories")}
+              variant="outline"
+            >
+              <Layers aria-hidden="true" />
+              View categories
+            </Button>
+          </HeaderActions>
         }
         description="The single source of truth for every material referenced by indents, procurement, inventory and consumption."
         eyebrow="Material master"
@@ -75,17 +95,25 @@ export function MaterialsScreen() {
         <KpiCard
           icon={PackageSearch}
           label="Catalogue size"
+          onClick={showAllMaterials}
           value={formatCompactNumber(total)}
         />
-        <KpiCard icon={Layers} label="Categories" value={kpis.categoryCount} />
+        <KpiCard
+          href="/materials/categories"
+          icon={Layers}
+          label="Categories"
+          value={kpis.categoryCount}
+        />
         <KpiCard
           icon={IndianRupee}
           label="Reorder-level valuation (page)"
+          onClick={showAllMaterials}
           value={formatCurrency(kpis.totalValue, { maximumFractionDigits: 0 })}
         />
         <KpiCard
           icon={Boxes}
           label="Active SKUs"
+          onClick={showAllMaterials}
           value={formatCompactNumber(total)}
         />
       </KpiGrid>

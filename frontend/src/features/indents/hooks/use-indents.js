@@ -61,6 +61,7 @@ export function useCreateIndent() {
       queryClient.invalidateQueries({ queryKey: indentsQueryKeys.lists() });
       // An indent can add new items to the material catalogue.
       queryClient.invalidateQueries({ queryKey: materialsQueryKeys.all });
+      queryClient.invalidateQueries({ queryKey: materialsQueryKeys.lists() });
     },
   });
 }

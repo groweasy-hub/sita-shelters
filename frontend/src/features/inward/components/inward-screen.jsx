@@ -83,6 +83,16 @@ export function InwardScreen() {
     }),
     [allRecords],
   );
+  const showAllRecords = () => {
+    setStatus(null);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
+  const showStatus = (nextStatus) => {
+    setStatus(nextStatus);
+    setSearch("");
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
+  };
   return (
     <Root>
       <PageHeader
@@ -104,23 +114,27 @@ export function InwardScreen() {
         <KpiCard
           icon={Truck}
           label="Total GRNs"
+          onClick={showAllRecords}
           value={formatCompactNumber(kpis.total)}
         />
         <KpiCard
           icon={PackageSearch}
           label="Pending QC"
+          onClick={() => showStatus("pending-qc")}
           tone="warning"
           value={kpis.pendingQc}
         />
         <KpiCard
           icon={ScanSearch}
           label="Under inspection"
+          onClick={() => showStatus("under-inspection")}
           tone="info"
           value={kpis.underInspection}
         />
         <KpiCard
           icon={ShieldAlert}
           label="Rejected"
+          onClick={() => showStatus("rejected")}
           tone="danger"
           value={kpis.rejected}
         />

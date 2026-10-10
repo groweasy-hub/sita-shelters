@@ -67,18 +67,20 @@ export function DamageReportTab({ projectId }) {
     <ReportGrid $columns="1fr">
       <KpiGrid>
         <KpiCard
+          href="/inventory/damaged"
           icon={PackageX}
           label="Damaged material value"
           tone="danger"
           value={formatCurrency(damageValue, { maximumFractionDigits: 0 })}
         />
         <KpiCard
+          href="/inventory/damaged"
           icon={Recycle}
           label="Construction wastage value"
           tone="warning"
           value={formatCurrency(wastageValue, { maximumFractionDigits: 0 })}
         />
-        <KpiCard label="Total incidents" value={records.length} />
+        <KpiCard href="/inventory/damaged" label="Total incidents" value={records.length} />
       </KpiGrid>
       <ReportGrid>
         <Panel>

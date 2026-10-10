@@ -146,8 +146,9 @@ const FormSection = styled.section`
     display: flex;
     height: 100%;
     min-height: 0;
-    align-items: start;
-    padding: clamp(0.85rem, 2vh, 1.25rem) 7.5rem clamp(0.85rem, 2vh, 1.25rem);
+    align-items: flex-start;
+    justify-content: center;
+    padding: 1.25rem 1rem 1.5rem;
     overflow-y: auto;
     background: #fffaf8;
   }
@@ -158,7 +159,7 @@ const FormSection = styled.section`
     padding-inline: 0.85rem;
   }
   @media (max-width: 430px) {
-    padding: 0.7rem 0.8rem;
+    padding: 1rem 1rem 1.5rem;
   }
 `;
 const FormContainer = styled.div`
@@ -166,7 +167,7 @@ const FormContainer = styled.div`
   width: 100%;
   max-width: 28rem;
   @media (max-width: 1023px) {
-    max-width: 49rem;
+    max-width: 24rem;
     margin: 0 auto;
     overflow: hidden;
   }
