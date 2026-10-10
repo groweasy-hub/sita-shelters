@@ -101,13 +101,8 @@ const Field = styled.div`
     }
   }
 `;
-const LabelRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-`;
 const TextLink = styled(Link)`
+  justify-self: end;
   color: ${({ theme }) => theme.colors.mutedForeground};
   font-size: 0.75rem;
   font-weight: 650;
@@ -338,10 +333,7 @@ export function LoginForm() {
           </Control>
         </Field>
         <Field>
-          <LabelRow>
-            <Label htmlFor="password">Password</Label>
-            <TextLink href="/forgot-password">Forgot password?</TextLink>
-          </LabelRow>
+          <Label htmlFor="password">Password</Label>
           <Control>
             <ControlIcon>
               <LockKeyhole aria-hidden="true" strokeWidth={1.9} />
@@ -368,10 +360,11 @@ export function LoginForm() {
           </Control>
         </Field>
         {error ? <ErrorMessage role="alert">{error}</ErrorMessage> : null}
+        <TextLink href="/forgot-password">Forgot password?</TextLink>
         <SubmitButton disabled={pending} type="submit">
           <ButtonLabel>
             <LockKeyhole aria-hidden="true" size={15} />
-            {pending ? "Signing in…" : "Continue securely"}
+            {pending ? "Signing in..." : "Login Now"}
           </ButtonLabel>
           <ArrowRight aria-hidden="true" size={16} />
         </SubmitButton>
@@ -386,3 +379,4 @@ export function LoginForm() {
     </Root>
   );
 }
+
