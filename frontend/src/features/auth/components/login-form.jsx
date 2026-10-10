@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Eye, EyeOff, Info, LockKeyhole, Mail } from "lucide-react";
 import styled, { keyframes } from "styled-components";
@@ -98,6 +99,27 @@ const Field = styled.div`
       font-size: 0.75rem;
       font-weight: 800;
     }
+  }
+`;
+const LabelRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+`;
+const TextLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.mutedForeground};
+  font-size: 0.75rem;
+  font-weight: 650;
+  text-decoration: none;
+  &:hover {
+    color: ${({ theme }) => theme.colors.foreground};
+    text-decoration: underline;
+  }
+  @media (max-width: 1023px) {
+    color: #990011;
+    font-size: 0.75rem;
+    font-weight: 850;
   }
 `;
 const Control = styled.div`
@@ -316,7 +338,10 @@ export function LoginForm() {
           </Control>
         </Field>
         <Field>
-          <Label htmlFor="password">Password</Label>
+          <LabelRow>
+            <Label htmlFor="password">Password</Label>
+            <TextLink href="/forgot-password">Forgot password?</TextLink>
+          </LabelRow>
           <Control>
             <ControlIcon>
               <LockKeyhole aria-hidden="true" strokeWidth={1.9} />

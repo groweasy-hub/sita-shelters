@@ -5,6 +5,16 @@ export function login({ email, password }) {
   return apiClient.post("/api/auth/login", { body: { email, password } });
 }
 
+export function requestPasswordReset({ email }) {
+  return apiClient.post("/api/auth/forgot-password", { body: { email } });
+}
+
+export function resetPassword({ token, password }) {
+  return apiClient.post("/api/auth/reset-password", {
+    body: { token, password },
+  });
+}
+
 export async function logout() {
   await apiClient.post("/api/auth/logout");
 }

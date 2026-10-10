@@ -215,23 +215,29 @@ authRouter.post("/forgot-password", async (req, res) => {
   const parsed = forgotPasswordSchema.safeParse(req.body);
   if (!parsed.success) {
     logAuthValidationFailure(req, "/forgot-password", parsed.error);
-    return res.json({ message: PASSWORD_RESET_REQUEST_MESSAGE });
+    return res.status(400).json({ error: "Enter a valid work email" });
   }
 
   try {
     const user = await getUserByEmailWithCredentials(parsed.data.email);
-    if (user && SIGN_IN_ALLOWED_STATUSES.has(user.status)) {
-      const resetToken = await createPasswordResetToken(user.id);
-      void sendPasswordResetEmail({
-        userId: user.id,
-        email: user.email,
-        token: resetToken,
-      });
+    if (!user || !SIGN_IN_ALLOWED_STATUSES.has(user.status)) {
+      return res.status(404).json({ error: "No active account found for this email" });
     }
+    const resetToken = await createPasswordResetToken(user.id);
+    void sendPasswordResetEmail({
+      userId: user.id,
+      email: user.email,
+      token: resetToken,
+    });
+    return res.json({
+      ok: true,
+      token: resetToken,
+      message: PASSWORD_RESET_REQUEST_MESSAGE,
+    });
   } catch (error) {
     logAuthError("Password reset request API error", error);
+    return res.status(500).json({ error: "Password reset could not be started" });
   }
-  return res.json({ message: PASSWORD_RESET_REQUEST_MESSAGE });
 });
 
 authRouter.post("/reset-password", async (req, res) => {

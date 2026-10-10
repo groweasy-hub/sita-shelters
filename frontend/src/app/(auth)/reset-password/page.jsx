@@ -1,5 +1,5 @@
-import { AuthFormPlaceholder } from "@/components/layout/auth-form-placeholder";
+import { ResetPasswordForm } from "@/features/auth";
 export const metadata = { title: "Reset password" };
 export default function ResetPasswordPage() {
-  return <AuthFormPlaceholder mode="reset-password" />;
+  return <ResetPasswordForm />;
 }
