@@ -36,7 +36,7 @@ const PrintStyles = createGlobalStyle`
   @media print {
     @page {
       size: A4 portrait;
-      margin: 7mm;
+      margin: 5mm;
     }
     body * {
       visibility: hidden !important;
@@ -48,11 +48,14 @@ const PrintStyles = createGlobalStyle`
     .billing-print-surface {
       position: absolute !important;
       inset: 0 !important;
-      width: 196mm !important;
+      box-sizing: border-box !important;
+      width: 200mm !important;
+      height: 287mm !important;
       max-width: none !important;
       margin: 0 !important;
       border: 0 !important;
       box-shadow: none !important;
+      overflow: hidden !important;
     }
     .no-print {
       display: none !important;
@@ -163,107 +166,247 @@ const ActionRow = styled.div`
   gap: 0.5rem;
 `;
 const InvoicePaper = styled.article`
-  width: min(100%, 190mm);
-  min-height: 270mm;
-  max-height: 270mm;
+  box-sizing: border-box;
+  width: min(100%, 200mm);
+  min-height: 287mm;
+  max-height: 287mm;
   margin: 0 auto;
-  padding: 0 2mm;
-  color: #000000;
+  padding: 0;
+  color: #071f4f;
   background: #ffffff;
   font-family: "Times New Roman", Times, serif;
+  border: 1px solid #d9e1ea;
+  box-shadow: 0 1rem 3rem rgb(15 23 42 / 0.08);
   overflow: hidden;
 
   @media print {
-    width: 196mm;
-    min-height: 283mm;
-    max-height: 283mm;
+    width: 200mm;
+    height: 287mm;
+    min-height: 287mm;
+    max-height: 287mm;
     padding: 0;
+    border: 0;
+    box-shadow: none;
+    overflow: hidden;
   }
 `;
-const BrandHeader = styled.header`
+const InvoiceInner = styled.div`
   display: grid;
-  justify-items: center;
-  align-content: center;
-  gap: 0.08rem;
-  align-items: center;
-  height: 13mm;
-  color: #000000;
+  gap: 2.45mm;
+  padding: 4.5mm 5mm 3.8mm;
+  transform: scale(0.985);
+  transform-origin: top left;
+  width: calc(100% / 0.985);
 `;
-const BrandName = styled.strong`
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.12rem;
+const InvoiceHeader = styled.header`
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(72mm, 0.9fr);
+  gap: 8mm;
+  align-items: start;
+`;
+const BrandBlock = styled.div`
+  display: grid;
+  gap: 2.4mm;
+`;
+const BrandImage = styled.img`
+  width: 92mm;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+`;
+const CompanyAddress = styled.div`
+  display: grid;
+  gap: 0.45mm;
+  font-size: 3.75mm;
+  line-height: 1.1;
+`;
+const CompanyName = styled.strong`
+  display: block;
+  font-size: 5.35mm;
   line-height: 1;
-  font-weight: 700;
-  text-align: center;
 `;
-const BrandTagline = styled.span`
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 0.48rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-align: center;
+const InvoiceTitleBlock = styled.div`
+  display: grid;
+  gap: 1.7mm;
 `;
-const ProformaTable = styled.table`
+const InvoiceHeading = styled.h2`
+  margin: 0;
+  color: #071f4f;
+  font-size: 7.4mm;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  span {
+    color: #d30026;
+  }
+`;
+const DetailTable = styled.table`
   width: 100%;
-  height: calc(100% - 13mm);
+  border-collapse: collapse;
+  font-size: 3.25mm;
+  td {
+    border: 1px solid #a7b3c0;
+    padding: 1.65mm 2.35mm;
+  }
+  td:first-child {
+    width: 38%;
+    background: #edf4fa;
+    font-weight: 800;
+  }
+`;
+const AccentRule = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 42mm;
+  height: 1mm;
+  background: #071f4f;
+  span {
+    background: #d30026;
+  }
+`;
+const InfoGrid = styled.section`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5mm;
+`;
+const InfoBox = styled.div`
+  min-height: 35mm;
+  border: 1px solid #a7b3c0;
+  font-size: 3.45mm;
+  line-height: 1.11;
+`;
+const BoxTitle = styled.h3`
+  margin: 0;
+  padding: 1.55mm 2.4mm;
+  border-bottom: 1px solid #a7b3c0;
+  background: #edf4fa;
+  font-size: 3.75mm;
+  line-height: 1;
+`;
+const BoxContent = styled.div`
+  padding: 2mm 2.4mm;
+  strong {
+    font-weight: 900;
+  }
+`;
+const ItemsTable = styled.table`
+  width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  border: 2px solid #000000;
-  font-size: 0.72rem;
-  line-height: 1.22;
+  color: #071f4f;
+  font-size: 3.25mm;
+  line-height: 1.04;
   th,
   td {
-    border: 1px solid #000000;
-    padding: 0.22rem 0.32rem;
+    border: 1px solid #a7b3c0;
+    padding: 1.55mm 2mm;
     vertical-align: top;
-    overflow-wrap: anywhere;
   }
   th {
-    background: #ffffff;
-    font-size: 0.68rem;
-    font-weight: 700;
-  }
-  .title {
-    height: 2rem;
+    background: #edf4fa;
     text-align: center;
-    font-size: 1.05rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-  }
-  .label {
-    font-weight: 800;
-  }
-  .company {
-    font-weight: 700;
-  }
-  .address-cell {
-    height: 4.9rem;
-  }
-  .spacer {
-    height: 0.7rem;
-  }
-  .item-row {
-    height: 2.15rem;
-  }
-  .amount,
-  .number {
-    text-align: right;
+    font-size: 3.15mm;
+    font-weight: 900;
   }
   .center {
     text-align: center;
   }
-  .words {
-    min-height: 2.2rem;
+  .number {
+    text-align: right;
   }
-  .account-title {
-    font-weight: 800;
-    text-align: center;
+  .item-row {
+    height: 9.4mm;
   }
-  .signature {
-    height: 2.6rem;
-    text-align: center;
-    vertical-align: bottom;
+  .blank-row {
+    height: 5.8mm;
+  }
+  .empty-left {
+    border-right: 0;
+    border-bottom: 0;
+  }
+  .total-label {
+    background: #edf4fa;
     font-weight: 700;
+  }
+  .grand-label,
+  .grand-value {
+    background: #071f4f;
+    color: #ffffff;
+    font-size: 3.7mm;
+    font-weight: 900;
+  }
+  .grand-label {
+    text-align: center;
+  }
+`;
+const WordsTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  color: #071f4f;
+  font-size: 3.25mm;
+  td {
+    border: 1px solid #a7b3c0;
+    padding: 2.15mm 2.5mm;
+  }
+  td:first-child {
+    width: 32mm;
+    background: #edf4fa;
+    font-weight: 900;
+    line-height: 1.05;
+  }
+  td:last-child {
+    font-weight: 900;
+  }
+`;
+const AccountSignatureGrid = styled.section`
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(64mm, 0.95fr);
+`;
+const AccountTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  color: #071f4f;
+  font-size: 3.2mm;
+  td {
+    border: 1px solid #a7b3c0;
+    padding: 1.75mm 2.35mm;
+  }
+  .title {
+    background: #edf4fa;
+    font-size: 3.45mm;
+    font-weight: 900;
+  }
+  .label {
+    width: 34%;
+    background: #edf4fa;
+    font-weight: 900;
+  }
+`;
+const SignatureBox = styled.div`
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  border: 1px solid #a7b3c0;
+  border-left: 0;
+  padding: 2.2mm 6mm 3mm;
+  color: #071f4f;
+  font-size: 3.2mm;
+  font-weight: 900;
+  text-align: center;
+`;
+const SignatureLine = styled.div`
+  align-self: end;
+  margin-bottom: 3mm;
+  border-bottom: 1px solid #8b98a8;
+`;
+const Footer = styled.footer`
+  display: grid;
+  gap: 2.8mm;
+  margin-top: 1.8mm;
+  color: #071f4f;
+  font-size: 3.1mm;
+  text-align: center;
+  ${AccentRule} {
+    height: 0.9mm;
   }
 `;
 const ChargePanel = styled.div`
@@ -338,8 +481,9 @@ function twoDigitsToWords(value) {
 }
 
 function amountToWords(value) {
-  const amount = Math.round(value);
-  if (amount === 0) return "Rupees Zero Only";
+  const amount = Math.floor(value);
+  const paise = Math.round((value - amount) * 100);
+  if (amount === 0 && paise === 0) return "Rupees Zero Only";
   const parts = [];
   const crore = Math.floor(amount / 10000000);
   const lakh = Math.floor((amount % 10000000) / 100000);
@@ -351,7 +495,10 @@ function amountToWords(value) {
   if (thousand) parts.push(`${twoDigitsToWords(thousand)} Thousand`);
   if (hundred) parts.push(`${ONES[hundred]} Hundred`);
   if (rest) parts.push(twoDigitsToWords(rest));
-  return `Rupees ${parts.join(" ")} Only`;
+  const rupees = amount > 0 ? `Rupees ${parts.join(" ")}` : "Rupees Zero";
+  return paise > 0
+    ? `${rupees} and ${twoDigitsToWords(paise)} Paise Only`
+    : `${rupees} Only`;
 }
 
 function matchesSearch(invoice, search) {
@@ -413,34 +560,90 @@ function safeFileName(value) {
   return value.replace(/[^a-z0-9._-]+/gi, "-").replace(/^-+|-+$/g, "");
 }
 
-function downloadInvoiceHtml(invoice) {
+async function imageToDataUrl(src) {
+  const response = await fetch(src);
+  if (!response.ok) throw new Error("Logo could not be loaded");
+  const blob = await response.blob();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function downloadInvoiceHtml(invoice) {
   const surface = document.querySelector(".billing-print-surface");
   if (!surface) return;
+  let logoSrc = `${window.location.origin}/images/logo.png`;
+  try {
+    logoSrc = await imageToDataUrl("/images/logo.png");
+  } catch (error) {
+    console.warn("Falling back to hosted invoice logo", error);
+  }
+  const invoiceNode = surface.cloneNode(true);
+  invoiceNode.querySelectorAll(".brand-image").forEach((image) => {
+    image.setAttribute("src", logoSrc);
+  });
+  const invoiceMarkup = invoiceNode.outerHTML;
   const html = `<!doctype html>
 <html>
 <head>
   <meta charset="utf-8" />
   <title>${invoice.invoiceNumber}</title>
   <style>
-    @page { size: A4 portrait; margin: 7mm; }
-    body { margin: 0; background: #fff; color: #000; font-family: "Times New Roman", Times, serif; }
+    @page { size: A4 portrait; margin: 5mm; }
+    body { margin: 0; background: #fff; color: #071f4f; font-family: "Times New Roman", Times, serif; }
     .invoice-download { padding: 0; }
-    .invoice-download article { width: 196mm; min-height: 283mm; max-height: 283mm; overflow: hidden; padding: 0; }
-    .invoice-download header { display: grid; justify-items: center; align-content: center; gap: 1px; height: 13mm; color: #000; }
-    .invoice-download .invoice-brand-name { font-family: Georgia, "Times New Roman", serif; font-size: 18px; line-height: 1; font-weight: 700; text-align: center; }
-    .invoice-download .invoice-brand-tagline { font-family: Arial, Helvetica, sans-serif; font-size: 7.5px; letter-spacing: .18em; text-transform: uppercase; text-align: center; }
-    .invoice-download table { width: 100%; height: calc(100% - 13mm); border-collapse: collapse; table-layout: fixed; border: 2px solid #000; font-size: 11.5px; line-height: 1.22; }
-    .invoice-download th, .invoice-download td { border: 1px solid #000; padding: 3.5px 5px; vertical-align: top; overflow-wrap: anywhere; }
-    .invoice-download .title { text-align: center; font-size: 16.8px; font-weight: 800; letter-spacing: .06em; }
-    .invoice-download .label, .invoice-download .company, .invoice-download .account-title { font-weight: 800; }
-    .invoice-download .center { text-align: center; }
-    .invoice-download .amount, .invoice-download .number { text-align: right; }
-    .invoice-download .signature { text-align: center; vertical-align: bottom; font-weight: 700; }
-    @media print { .invoice-download { padding: 0; } }
+    .sita-invoice { box-sizing: border-box; width: 200mm; height: 287mm; min-height: 287mm; max-height: 287mm; margin: 0 auto; padding: 0; overflow: hidden; background: #fff; color: #071f4f; font-family: "Times New Roman", Times, serif; }
+    .sita-invoice * { box-sizing: border-box; }
+    .invoice-inner { display: grid; gap: 2.45mm; padding: 4.5mm 5mm 3.8mm; transform: scale(.985); transform-origin: top left; width: calc(100% / .985); }
+    .invoice-header { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(72mm, .9fr); gap: 8mm; align-items: start; }
+    .brand-block { display: grid; gap: 2.4mm; }
+    .brand-image { width: 92mm; max-width: 100%; height: auto; object-fit: contain; }
+    .company-address { display: grid; gap: .45mm; font-size: 3.75mm; line-height: 1.1; }
+    .company-name { display: block; font-size: 5.35mm; line-height: 1; font-weight: 900; }
+    .invoice-title-block { display: grid; gap: 1.7mm; }
+    .invoice-heading { margin: 0; color: #071f4f; font-size: 7.4mm; line-height: 1; font-weight: 900; letter-spacing: -.02em; white-space: nowrap; }
+    .invoice-heading span { color: #d30026; }
+    .detail-table, .items-table, .words-table, .account-table { width: 100%; border-collapse: collapse; }
+    .detail-table { font-size: 3.25mm; }
+    .detail-table td { border: 1px solid #a7b3c0; padding: 1.65mm 2.35mm; }
+    .detail-table td:first-child { width: 38%; background: #edf4fa; font-weight: 800; }
+    .accent-rule { display: grid; grid-template-columns: 1fr 42mm; height: 1mm; background: #071f4f; }
+    .accent-rule span { background: #d30026; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5mm; }
+    .info-box { min-height: 35mm; border: 1px solid #a7b3c0; font-size: 3.45mm; line-height: 1.11; }
+    .box-title { margin: 0; padding: 1.55mm 2.4mm; border-bottom: 1px solid #a7b3c0; background: #edf4fa; font-size: 3.75mm; line-height: 1; }
+    .box-content { padding: 2mm 2.4mm; }
+    .items-table { table-layout: fixed; font-size: 3.25mm; line-height: 1.04; }
+    .items-table th, .items-table td { border: 1px solid #a7b3c0; padding: 1.55mm 2mm; vertical-align: top; }
+    .items-table th { background: #edf4fa; text-align: center; font-size: 3.15mm; font-weight: 900; }
+    .center { text-align: center; }
+    .number { text-align: right; }
+    .item-row { height: 9.4mm; }
+    .blank-row { height: 5.8mm; }
+    .empty-left { border-right: 0 !important; border-bottom: 0 !important; }
+    .total-label { background: #edf4fa; font-weight: 700; }
+    .grand-label, .grand-value { background: #071f4f; color: #fff; font-size: 3.7mm; font-weight: 900; }
+    .grand-label { text-align: center; }
+    .words-table { font-size: 3.25mm; }
+    .words-table td { border: 1px solid #a7b3c0; padding: 2.15mm 2.5mm; }
+    .words-table td:first-child { width: 32mm; background: #edf4fa; font-weight: 900; line-height: 1.05; }
+    .words-table td:last-child { font-weight: 900; }
+    .account-signature-grid { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(64mm, .95fr); }
+    .account-table { font-size: 3.2mm; }
+    .account-table td { border: 1px solid #a7b3c0; padding: 1.75mm 2.35mm; }
+    .account-table .title, .account-table .label { background: #edf4fa; font-weight: 900; }
+    .account-table .label { width: 34%; }
+    .signature-box { display: grid; grid-template-rows: auto 1fr auto; border: 1px solid #a7b3c0; border-left: 0; padding: 2.2mm 6mm 3mm; font-size: 3.2mm; font-weight: 900; text-align: center; }
+    .signature-line { align-self: end; margin-bottom: 3mm; border-bottom: 1px solid #8b98a8; }
+    .footer { display: grid; gap: 2.8mm; margin-top: 1.8mm; font-size: 3.1mm; text-align: center; }
+    .footer .accent-rule { height: .9mm; }
   </style>
 </head>
 <body>
-  <main class="invoice-download">${surface.outerHTML}</main>
+  <main class="invoice-download">${invoiceMarkup}</main>
 </body>
 </html>`;
   const blob = new Blob([html], { type: "text/html;charset=utf-8" });
@@ -463,118 +666,126 @@ function PrintInvoice({ invoice }) {
   const materialLines = invoice.lines.filter((line) => line.lineType === "material");
   const chargeLines = invoice.lines.filter((line) => line.lineType === "charge");
   const allDisplayLines = [...materialLines, ...chargeLines];
-  const displayLines =
-    allDisplayLines.length > 6
-      ? [
-          ...allDisplayLines.slice(0, 5),
-          {
-            materialCode: "ADDITIONAL",
-            materialName: `${allDisplayLines.length - 5} additional material/charge lines`,
-            hsnCode: "995419",
-            lineType: "charge",
-            quantity: 1,
-            unit: "job",
-            unitPrice: allDisplayLines
-              .slice(5)
-              .reduce((sum, line) => sum + line.taxableAmount, 0),
-            taxableAmount: allDisplayLines
-              .slice(5)
-              .reduce((sum, line) => sum + line.taxableAmount, 0),
-          },
-        ]
-      : allDisplayLines;
+  const displayLines = allDisplayLines.slice(0, 6);
+  const overflowValue = allDisplayLines
+    .slice(6)
+    .reduce((sum, line) => sum + line.taxableAmount, 0);
+  if (overflowValue > 0) {
+    displayLines.push({
+      materialCode: "ADDITIONAL",
+      materialName: `${allDisplayLines.length - 6} additional line${allDisplayLines.length - 6 === 1 ? "" : "s"}`,
+      hsnCode: "995419",
+      lineType: "charge",
+      quantity: 1,
+      unit: "job",
+      unitPrice: overflowValue,
+      taxableAmount: overflowValue,
+    });
+  }
+  const blankRows = Math.max(0, 6 - displayLines.length);
   return (
-    <InvoicePaper className="billing-print-surface">
-      <BrandHeader className="invoice-brand-header">
-        <BrandName className="invoice-brand-name">Sita Shelters Pvt. Ltd.</BrandName>
-        <BrandTagline className="invoice-brand-tagline">
-          Creating Timeless Dreams
-        </BrandTagline>
-      </BrandHeader>
-      <ProformaTable>
-        <colgroup>
-          <col style={{ width: "8%" }} />
-          <col style={{ width: "12%" }} />
-          <col style={{ width: "28%" }} />
-          <col style={{ width: "20%" }} />
-          <col style={{ width: "10%" }} />
-          <col style={{ width: "10%" }} />
-          <col style={{ width: "12%" }} />
-        </colgroup>
-        <tbody>
-          <tr>
-            <td className="title" colSpan={7}>
-              PROFORMA INVOICE
-            </td>
-          </tr>
-          <tr>
-            <td className="label" colSpan={2}>From:</td>
-            <td colSpan={2}></td>
-            <td className="label">GSTIN:</td>
-            <td colSpan={2}>36AAKCS2926A1ZK</td>
-          </tr>
-          <tr>
-            <td className="company" colSpan={4}>Sita Shelters Pvt Ltd</td>
-            <td className="label">INVOICE NO:</td>
-            <td colSpan={2}>{invoice.invoiceNumber}</td>
-          </tr>
-          <tr>
-            <td colSpan={4}>H.No.7-1-21/B, FLAT NO.107, SITA SAROVAR</td>
-            <td className="label">INVOICE DATE:</td>
-            <td colSpan={2}>{formatDate(invoice.invoiceDate)}</td>
-          </tr>
-          <tr>
-            <td colSpan={4}>BEGUMPET, HYDERABAD - 500016</td>
-            <td className="label">PAN NO:</td>
-            <td colSpan={2}>AAKCS2926A</td>
-          </tr>
-          <tr>
-            <td className="spacer" colSpan={7}></td>
-          </tr>
-          <tr>
-            <td className="label" colSpan={3}>Bill To:</td>
-            <td className="label" colSpan={4}>Location of premises:</td>
-          </tr>
-          <tr>
-            <td className="address-cell" colSpan={3}>
+    <InvoicePaper className="billing-print-surface sita-invoice">
+      <InvoiceInner className="invoice-inner">
+        <InvoiceHeader className="invoice-header">
+          <BrandBlock className="brand-block">
+            <BrandImage
+              alt="Sita Shelters - Creating Timeless Dreams"
+              className="brand-image"
+              src="/images/logo.png"
+            />
+            <CompanyAddress className="company-address">
+              <CompanyName className="company-name">Sita Shelters Pvt. Ltd.</CompanyName>
+              <span>H.No.7-1-21/B, Flat No.107, Sita Sarovar,</span>
+              <span>Begumpet, Hyderabad - 500016.</span>
+            </CompanyAddress>
+          </BrandBlock>
+          <InvoiceTitleBlock className="invoice-title-block">
+            <InvoiceHeading className="invoice-heading">
+              PROFORMA <span>INVOICE</span>
+            </InvoiceHeading>
+            <DetailTable className="detail-table">
+              <tbody>
+                <tr>
+                  <td>GSTIN:</td>
+                  <td>36AAKCS2926A1ZK</td>
+                </tr>
+                <tr>
+                  <td>INVOICE NO:</td>
+                  <td>{invoice.invoiceNumber}</td>
+                </tr>
+                <tr>
+                  <td>INVOICE DATE:</td>
+                  <td>{formatDate(invoice.invoiceDate)}</td>
+                </tr>
+                <tr>
+                  <td>PAN NO:</td>
+                  <td>AAKCS2926A</td>
+                </tr>
+              </tbody>
+            </DetailTable>
+          </InvoiceTitleBlock>
+        </InvoiceHeader>
+        <AccentRule className="accent-rule">
+          <span />
+        </AccentRule>
+        <InfoGrid className="info-grid">
+          <InfoBox className="info-box">
+            <BoxTitle className="box-title">Bill To:</BoxTitle>
+            <BoxContent className="box-content">
               <strong>{invoice.vendorName}</strong>
               <br />
               {invoice.vendorAddress}
               {invoice.vendorGstNumber ? (
                 <>
                   <br />
-                  GST: {invoice.vendorGstNumber}
+                  <strong>GST:</strong> {invoice.vendorGstNumber}
                 </>
               ) : null}
-            </td>
-            <td className="address-cell" colSpan={4}>
+            </BoxContent>
+          </InfoBox>
+          <InfoBox className="info-box">
+            <BoxTitle className="box-title">Location of Premises:</BoxTitle>
+            <BoxContent className="box-content">
               <strong>{invoice.projectName}</strong>
               <br />
               {invoice.projectAddress}
               <br />
-              Purchase Order: {invoice.purchaseOrderNumber}
+              <strong>Purchase Order:</strong> {invoice.purchaseOrderNumber}
               <br />
-              Delivery Challan: {invoice.deliveryChallanNumber}
+              <strong>Delivery Challan:</strong> {invoice.deliveryChallanNumber}
               <br />
-              Vehicle: {invoice.vehicleNumber} | Transporter: {invoice.transporterName}
-            </td>
-          </tr>
+              <strong>Vehicle:</strong> {invoice.vehicleNumber}
+              {" | "}
+              <strong>Transporter:</strong> {invoice.transporterName}
+            </BoxContent>
+          </InfoBox>
+        </InfoGrid>
+        <ItemsTable className="items-table">
+        <colgroup>
+          <col style={{ width: "7%" }} />
+          <col style={{ width: "11.5%" }} />
+          <col style={{ width: "26.5%" }} />
+          <col style={{ width: "19.5%" }} />
+          <col style={{ width: "12.5%" }} />
+          <col style={{ width: "11%" }} />
+          <col style={{ width: "12%" }} />
+        </colgroup>
+        <thead>
           <tr>
-            <td className="spacer" colSpan={7}></td>
-          </tr>
-          <tr>
-            <th>SL.No</th>
-            <th>HS Code</th>
+            <th>S.No</th>
+            <th>HSN Code</th>
             <th>Description of Services</th>
-            <th>Period of Service</th>
+            <th>Service / Reference</th>
             <th>Qty</th>
-            <th>Rate</th>
-            <th>Amount</th>
+            <th>Rate<br />(INR)</th>
+            <th>Amount<br />(INR)</th>
           </tr>
+        </thead>
+        <tbody>
           {displayLines.map((line, index) => (
             <tr className="item-row" key={`${line.materialCode}-${index}`}>
-              <td>{index + 1}</td>
-              <td>{line.hsnCode}</td>
+              <td className="center">{index + 1}</td>
+              <td className="center">{line.hsnCode}</td>
               <td>{line.materialName}</td>
               <td>
                 {line.lineType === "material"
@@ -588,64 +799,93 @@ function PrintInvoice({ invoice }) {
                     ? "1 job"
                     : "-"}
               </td>
-              <td className="amount">{formatInvoiceAmount(line.unitPrice)}</td>
-              <td className="amount">{formatInvoiceAmount(line.taxableAmount)}</td>
+              <td className="number">{formatInvoiceAmount(line.unitPrice)}</td>
+              <td className="number">{formatInvoiceAmount(line.taxableAmount)}</td>
+            </tr>
+          ))}
+          {Array.from({ length: blankRows }).map((_, index) => (
+            <tr className="blank-row" key={`blank-${index}`}>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
           ))}
           <tr>
-            <td colSpan={5}></td>
-            <td className="label">Taxable Value</td>
-            <td className="amount">{formatInvoiceAmount(invoice.taxableAmount)}</td>
+            <td className="empty-left" colSpan={4} rowSpan={5}></td>
+            <td className="empty-left"></td>
+            <td className="total-label">Taxable Value</td>
+            <td className="number">{formatInvoiceAmount(invoice.taxableAmount)}</td>
           </tr>
           <tr>
-            <td colSpan={5}></td>
-            <td className="label">SGST : {splitTaxPercent.toFixed(2).replace(/\.00$/, "")}%</td>
-            <td className="amount">{formatInvoiceAmount(sgst)}</td>
+            <td className="empty-left"></td>
+            <td className="total-label">SGST ({splitTaxPercent.toFixed(2).replace(/\.00$/, "")}%)</td>
+            <td className="number">{formatInvoiceAmount(sgst)}</td>
           </tr>
           <tr>
-            <td colSpan={5}></td>
-            <td className="label">CGST : {splitTaxPercent.toFixed(2).replace(/\.00$/, "")}%</td>
-            <td className="amount">{formatInvoiceAmount(cgst)}</td>
+            <td className="empty-left"></td>
+            <td className="total-label">CGST ({splitTaxPercent.toFixed(2).replace(/\.00$/, "")}%)</td>
+            <td className="number">{formatInvoiceAmount(cgst)}</td>
           </tr>
           <tr>
-            <td colSpan={5}></td>
-            <td className="label">Total Tax : {totalTaxPercent.toFixed(2).replace(/\.00$/, "")}%</td>
-            <td className="amount">{formatInvoiceAmount(invoice.taxAmount)}</td>
+            <td className="empty-left"></td>
+            <td className="total-label">Total Tax ({totalTaxPercent.toFixed(2).replace(/\.00$/, "")}%)</td>
+            <td className="number">{formatInvoiceAmount(invoice.taxAmount)}</td>
           </tr>
           <tr>
-            <td colSpan={5}></td>
-            <td className="label">Total</td>
-            <td className="amount label">{formatInvoiceAmount(invoice.totalAmount)}</td>
-          </tr>
-          <tr>
-            <td className="label" colSpan={2}>Invoice Value<br />in words</td>
-            <td className="words" colSpan={3}>
-              <strong>{amountToWords(invoice.totalAmount)}</strong>
-            </td>
-            <td className="label">Total Invoice Amount (INR)</td>
-            <td className="amount label">{formatInvoiceAmount(invoice.totalAmount)}</td>
-          </tr>
-          <tr>
-            <td className="account-title" colSpan={7}>ACCOUNT DETAILS</td>
-          </tr>
-          <tr>
-            <td className="label" colSpan={2}>Account Name</td>
-            <td colSpan={5}>Sita Shelters Private Limited</td>
-          </tr>
-          <tr>
-            <td className="label" colSpan={2}>A/c No</td>
-            <td colSpan={5}>1410010000000478</td>
-          </tr>
-          <tr>
-            <td className="label" colSpan={2}>IFSC</td>
-            <td colSpan={2}>KVBL0001410, Secunderabad Branch.</td>
-            <td className="signature" colSpan={3} rowSpan={2}>Authorized Signatory</td>
-          </tr>
-          <tr>
-            <td colSpan={4}>H. No. 7-1-21/B, Flat No. 107, Sita Sarovar, Begumpet, Hyderabad - 500016.</td>
+            <td className="grand-label" colSpan={2}>Total Invoice Amount (INR)</td>
+            <td className="grand-value number">{formatInvoiceAmount(invoice.totalAmount)}</td>
           </tr>
         </tbody>
-      </ProformaTable>
+      </ItemsTable>
+      <WordsTable className="words-table">
+        <tbody>
+          <tr>
+            <td>Invoice Value<br />in words</td>
+            <td>{amountToWords(invoice.totalAmount)}</td>
+          </tr>
+        </tbody>
+      </WordsTable>
+      <AccountSignatureGrid className="account-signature-grid">
+        <AccountTable className="account-table">
+          <tbody>
+            <tr>
+              <td className="title" colSpan={2}>ACCOUNT DETAILS</td>
+            </tr>
+            <tr>
+              <td className="label">Account Name</td>
+              <td>Sita Shelters Private Limited</td>
+            </tr>
+            <tr>
+              <td className="label">A/c No</td>
+              <td>1410010000000478</td>
+            </tr>
+            <tr>
+              <td className="label">IFSC</td>
+              <td>KVBL0001410</td>
+            </tr>
+            <tr>
+              <td className="label">Branch</td>
+              <td>Secunderabad.</td>
+            </tr>
+          </tbody>
+        </AccountTable>
+        <SignatureBox className="signature-box">
+          <div>For Sita Shelters Pvt. Ltd.</div>
+          <SignatureLine className="signature-line" />
+          <div>Authorized Signatory</div>
+        </SignatureBox>
+      </AccountSignatureGrid>
+      <Footer className="footer">
+        <AccentRule className="accent-rule">
+          <span />
+        </AccentRule>
+        <div>H.No.7-1-21/B, Flat No.107, Sita Sarovar, Begumpet, Hyderabad - 500016.</div>
+      </Footer>
+      </InvoiceInner>
     </InvoicePaper>
   );
 }
